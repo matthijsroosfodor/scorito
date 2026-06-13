@@ -27,6 +27,7 @@ jobs:
         with:
           prompt_file: OPDRACHT.md
           allowed_tools: "WebSearch,WebFetch,Read,Edit,Write"
+          model: "claude-sonnet-4-6"
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           # Gebruik je liever je Claude-abonnement i.p.v. API-tegoed? Vervang de regel
           # hierboven door:  claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
