@@ -5,77 +5,112 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Scorito WK 2026 — Klassement</title>
 <style>
-:root { color-scheme: light; }
-* { box-sizing: border-box; }
-body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; background:#f4f6f8; color:#1a2230; -webkit-font-smoothing:antialiased; }
-.wrap { max-width:720px; margin:0 auto; padding:16px 14px 60px; }
-header.top { text-align:center; padding:18px 12px 6px; }
-header.top h1 { margin:0 0 2px; font-size:22px; letter-spacing:-0.3px; }
-header.top .sub { color:#6b7686; font-size:13px; }
-.updated { text-align:center; font-size:11.5px; color:#9aa3b2; margin-bottom:14px; }
+:root{ color-scheme:light;
+  --green:#16a34a; --green2:#0ea5e9; --gold:#f5b301; --ink:#15233b; --muted:#6b7686;
+  --line:#e6ebf2; --bg:#eef2f7; --card:#ffffff;
+}
+*{ box-sizing:border-box; }
+body{ margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  background:var(--bg); color:var(--ink); -webkit-font-smoothing:antialiased; }
+.wrap{ max-width:740px; margin:0 auto; padding:0 14px 64px; }
 
-.board { background:#fff; border:1px solid #e3e8ef; border-radius:16px; box-shadow:0 4px 14px rgba(20,40,80,.06); padding:8px; margin-bottom:12px; }
-.prow { display:flex; align-items:center; gap:12px; padding:10px 12px; border-radius:12px; }
-.prow + .prow { margin-top:2px; }
-.prow.leader { background:#effaf2; }
-.prow .rank { font-size:15px; font-weight:800; color:#aab3c2; width:24px; text-align:center; }
-.prow.leader .rank { color:#1faa59; }
-.prow .nm { flex:1; font-weight:700; font-size:16px; }
-.prow .nm .crown { margin-left:6px; }
-.prow .sc { font-size:22px; font-weight:800; }
-.prow .sc small { font-size:12px; color:#6b7686; font-weight:600; }
+/* ===== Banner ===== */
+.banner{ position:relative; margin:0 -14px 0; padding:30px 20px 64px; text-align:center; color:#fff; overflow:hidden;
+  background:linear-gradient(135deg,#15803d 0%,#16a34a 40%,#0ea5e9 100%); }
+.banner::after{ content:""; position:absolute; inset:0; opacity:.12;
+  background-image:radial-gradient(circle at 20% 30%,#fff 2px,transparent 3px),radial-gradient(circle at 70% 60%,#fff 2px,transparent 3px),radial-gradient(circle at 40% 80%,#fff 1.5px,transparent 3px);
+  background-size:90px 90px,120px 120px,70px 70px; }
+.banner h1{ margin:0; font-size:26px; font-weight:800; letter-spacing:-.4px; position:relative; }
+.banner .ball{ font-size:30px; }
+.banner .sub{ margin-top:4px; font-size:13px; opacity:.92; position:relative; }
+.banner .hosts{ margin-top:8px; font-size:18px; position:relative; letter-spacing:3px; }
+.updated{ text-align:center; font-size:11.5px; color:var(--muted); margin:10px 0 16px; }
 
-.controls { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:16px; font-size:12.5px; color:#6b7686; }
-.progress-bar { flex:1; min-width:140px; height:8px; background:#e3e8ef; border-radius:6px; overflow:hidden; }
-.progress-fill { height:100%; width:0; background:#1faa59; transition:width .3s; }
+/* ===== Podium ===== */
+.podium-wrap{ margin-top:-44px; position:relative; z-index:2; }
+.podium{ display:flex; align-items:flex-end; justify-content:center; gap:10px; }
+.pod{ flex:1; max-width:33%; display:flex; flex-direction:column; align-items:center; }
+.pod .medal{ font-size:26px; line-height:1; filter:drop-shadow(0 2px 3px rgba(0,0,0,.2)); }
+.pod .av{ width:46px; height:46px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+  font-weight:800; font-size:18px; color:#fff; margin:6px 0 4px; border:3px solid #fff; box-shadow:0 4px 10px rgba(20,40,80,.18); }
+.pod .nm{ font-weight:700; font-size:14px; text-align:center; max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.pod .pts{ font-size:13px; color:var(--muted); font-weight:600; margin-bottom:6px; }
+.pod .bar{ width:100%; border-radius:12px 12px 0 0; display:flex; align-items:flex-start; justify-content:center;
+  padding-top:8px; color:#fff; font-weight:800; font-size:20px; box-shadow:inset 0 -6px 14px rgba(0,0,0,.08); }
+.pod.p1 .bar{ height:96px; background:linear-gradient(180deg,#f7c948,#f5b301); }
+.pod.p2 .bar{ height:70px; background:linear-gradient(180deg,#cdd6e0,#aab6c4); }
+.pod.p3 .bar{ height:54px; background:linear-gradient(180deg,#e0a06a,#cd7f4f); }
+.pod.p1 .av{ background:var(--gold); } .pod.p2 .av{ background:#9aa7b6; } .pod.p3 .av{ background:#cd7f4f; }
+.pod.p1{ order:2; } .pod.p2{ order:1; } .pod.p3{ order:3; }
 
-.champ { background:#fff7ec; border:1px solid #f3dcb6; border-radius:12px; padding:11px 14px; margin-bottom:16px; font-size:13px; line-height:1.7; }
-.champ b { color:#b9740a; }
+/* ranglijst onder podium / fallback */
+.rest{ background:var(--card); border:1px solid var(--line); border-radius:14px; margin-top:12px; overflow:hidden; box-shadow:0 4px 14px rgba(20,40,80,.05); }
+.rrow{ display:flex; align-items:center; gap:12px; padding:11px 14px; border-top:1px solid var(--line); }
+.rrow:first-child{ border-top:none; }
+.rrow .rank{ width:22px; text-align:center; font-weight:800; color:#aab3c2; font-size:14px; }
+.rrow .av{ width:30px; height:30px; border-radius:50%; background:#dfe6ef; color:#5a6b82; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:13px; }
+.rrow .nm{ flex:1; font-weight:700; }
+.rrow .pts{ font-weight:800; font-size:17px; } .rrow .pts small{ font-size:11px; color:var(--muted); font-weight:600; }
 
-.group { background:#fff; border:1px solid #e3e8ef; border-radius:14px; margin-bottom:12px; overflow:hidden; }
-.group > summary { cursor:pointer; list-style:none; padding:13px 16px; display:flex; align-items:center; gap:10px; font-weight:700; font-size:15px; background:#fafbfd; outline:none; }
-.group > summary::-webkit-details-marker { display:none; }
-.group .gtag { background:#1a2230; color:#fff; border-radius:7px; padding:2px 9px; font-size:13px; }
-.group .gmeta { color:#9aa3b2; font-weight:500; font-size:11.5px; flex:1; text-align:right; }
-.group .chev { color:#aab3c2; transition:transform .2s; }
-.group[open] .chev { transform:rotate(90deg); }
-.gbody { padding:6px 14px 14px; }
+/* progress */
+.controls{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin:18px 2px 18px; font-size:12.5px; color:var(--muted); }
+.progress-bar{ flex:1; min-width:140px; height:9px; background:#dde4ee; border-radius:6px; overflow:hidden; }
+.progress-fill{ height:100%; width:0; background:linear-gradient(90deg,var(--green),var(--green2)); transition:width .4s; }
 
-.minitbl { width:100%; border-collapse:collapse; font-size:12px; margin:2px 0 12px; }
-.minitbl th { color:#9aa3b2; font-weight:600; text-align:center; padding:3px 4px; font-size:10.5px; text-transform:uppercase; }
-.minitbl th.l, .minitbl td.l { text-align:left; }
-.minitbl td { padding:4px; text-align:center; border-top:1px solid #f0f3f7; }
-.minitbl td.team { font-weight:600; }
-.minitbl tr.qual td.team::after { content:" ✓"; color:#1faa59; }
+/* champion */
+.champ{ background:linear-gradient(135deg,#fff8e9,#fff3d6); border:1px solid #f2dca0; border-radius:14px; padding:13px 16px; margin-bottom:18px; font-size:13.5px; line-height:1.8; }
+.champ .h{ font-weight:800; color:#b9740a; font-size:14px; margin-bottom:2px; }
+.champ .pp{ display:inline-block; margin-right:4px; }
 
-.match { border-top:1px solid #eef1f6; padding:11px 2px; }
-.match:first-child { border-top:none; }
-.match .line { display:flex; align-items:center; justify-content:center; gap:10px; font-weight:700; font-size:15px; }
-.match .line .t { flex:1; }
-.match .line .t.h { text-align:right; }
-.match .line .t.a { text-align:left; }
-.match .line .res { background:#1a2230; color:#fff; border-radius:8px; padding:2px 10px; font-variant-numeric:tabular-nums; min-width:54px; text-align:center; }
-.match .line .res.todo { background:#e3e8ef; color:#aab3c2; }
-.preds { margin-top:8px; display:grid; grid-template-columns:1fr 1fr; gap:5px; }
-.pred { background:#f7f9fc; border-radius:9px; padding:5px 10px; display:flex; align-items:center; justify-content:space-between; font-size:12.5px; }
-.pred .who { color:#6b7686; font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-.pred .rgt { white-space:nowrap; }
-.pred .val { font-weight:700; }
-.pred .pt { font-size:11.5px; font-weight:700; margin-left:7px; }
-.pt.scored { color:#1faa59; } .pt.exact { color:#e8830c; } .pt.miss { color:#cf4b4b; } .pt.none { color:#c2cad6; }
+/* groups */
+.sec-title{ font-size:13px; font-weight:800; color:var(--muted); text-transform:uppercase; letter-spacing:.6px; margin:6px 4px 10px; }
+.group{ background:var(--card); border:1px solid var(--line); border-radius:16px; margin-bottom:12px; overflow:hidden; box-shadow:0 3px 10px rgba(20,40,80,.04); }
+.group>summary{ cursor:pointer; list-style:none; padding:14px 16px; display:flex; align-items:center; gap:10px; font-weight:800; font-size:15px; }
+.group>summary::-webkit-details-marker{ display:none; }
+.group .gtag{ background:linear-gradient(135deg,var(--green),var(--green2)); color:#fff; border-radius:8px; padding:3px 11px; font-size:13px; }
+.group .gmeta{ color:#9aa3b2; font-weight:600; font-size:11.5px; flex:1; text-align:right; }
+.group .chev{ color:#b3bccb; transition:transform .2s; }
+.group[open] .chev{ transform:rotate(90deg); }
+.gbody{ padding:4px 14px 14px; }
 
-.footer-note { text-align:center; color:#9aa3b2; font-size:12px; margin-top:24px; line-height:1.6; }
+.minitbl{ width:100%; border-collapse:collapse; font-size:12px; margin:2px 0 10px; }
+.minitbl th{ color:#9aa3b2; font-weight:700; text-align:center; padding:4px; font-size:10px; text-transform:uppercase; }
+.minitbl th.l,.minitbl td.l{ text-align:left; }
+.minitbl td{ padding:5px 4px; text-align:center; border-top:1px solid #eef2f7; }
+.minitbl td.team{ font-weight:700; }
+.minitbl tr.qual{ background:#f0fbf4; }
+.minitbl tr.qual td.team::after{ content:" ✓"; color:var(--green); font-weight:800; }
+
+.match{ border-top:1px solid #eef2f7; padding:12px 2px; }
+.match:first-child{ border-top:none; }
+.mline{ display:flex; align-items:center; justify-content:center; gap:12px; font-weight:700; font-size:15px; }
+.mline .t{ flex:1; display:flex; align-items:center; gap:7px; }
+.mline .t.h{ justify-content:flex-end; text-align:right; }
+.mline .flag{ font-size:22px; }
+.mline .res{ background:var(--ink); color:#fff; border-radius:9px; padding:3px 11px; font-variant-numeric:tabular-nums; min-width:56px; text-align:center; font-size:15px; }
+.mline .res.todo{ background:#e3e8ef; color:#aab3c2; font-weight:600; }
+.preds{ margin-top:9px; display:grid; grid-template-columns:1fr 1fr; gap:6px; }
+.pred{ background:#f6f8fb; border:1px solid #eef2f7; border-radius:10px; padding:6px 10px; display:flex; align-items:center; justify-content:space-between; font-size:12.5px; }
+.pred .who{ color:var(--muted); font-weight:700; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.pred .rgt{ white-space:nowrap; }
+.pred .val{ font-weight:800; }
+.pred .pt{ font-size:11px; font-weight:800; margin-left:7px; padding:1px 5px; border-radius:6px; }
+.pt.scored{ color:var(--green); background:#e7f7ee; } .pt.exact{ color:#c2710a; background:#fdf0d8; }
+.pt.miss{ color:#cf4b4b; background:#fdeaea; } .pt.none{ color:#c2cad6; }
+
+.footer-note{ text-align:center; color:#9aa3b2; font-size:12px; margin-top:26px; line-height:1.7; }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header class="top">
-    <h1>⚽ Scorito WK 2026 — Klassement</h1>
-    <div class="sub">Live stand · automatisch bijgewerkt na elke wedstrijd</div>
-  </header>
-  <div class="updated" id="updated"></div>
+<div class="banner">
+  <h1><span class="ball">⚽</span> Scorito WK 2026</h1>
+  <div class="sub">Live klassement · automatisch bijgewerkt na elke wedstrijd</div>
+  <div class="hosts">🇺🇸 🇨🇦 🇲🇽</div>
+</div>
 
-  <div class="board" id="board"></div>
+<div class="wrap">
+  <div class="podium-wrap"><div id="board"></div></div>
+  <div class="updated" id="updated"></div>
 
   <div class="controls">
     <span id="progressText">0/72 gespeeld</span>
@@ -84,17 +119,17 @@ header.top .sub { color:#6b7686; font-size:13px; }
 
   <div class="champ" id="champ"></div>
 
+  <div class="sec-title">📋 Poules &amp; uitslagen</div>
   <div id="groups"></div>
 
   <div class="footer-note">
-    Puntentelling: exacte uitslag 45 · juiste toto 30 · wereldkampioen 250.<br>
-    Uitslagen worden automatisch bijgehouden — ververs de pagina voor de nieuwste stand.
+    Punten: exacte uitslag 45 · juiste toto 30 · wereldkampioen 250.<br>
+    Ververs de pagina voor de nieuwste stand.
   </div>
 </div>
 
 <script src="results.js"></script>
 <script>
-/* ====== Vaste gegevens ====== */
 const GROUPS = {
   A:["Mexico","Zuid-Afrika","Zuid-Korea","Tsjechië"],
   B:["Canada","Bosnië-Herz.","Qatar","Zwitserland"],
@@ -122,18 +157,12 @@ const MATCHES=[];
 for(const g of Object.keys(GROUPS)) RR.forEach((p,i)=>MATCHES.push({id:g+"-"+i,group:g,home:GROUPS[g][p[0]],away:GROUPS[g][p[1]]}));
 const POINTS={exact:45,toto:30,champ:250};
 
-/* ====== Ingebakken spelers (Wil & Thijs) ======
-   PRED_WT[id] = [ [wil_h,wil_a], [thijs_h,thijs_a] ] */
 const PRED_WT={"A-0":[[0,0],[0,0]],"A-1":[[0,0],[0,0]],"A-2":[[2,1],[0,1]],"A-3":[[1,0],[0,1]],"A-4":[[2,1],[1,0]],"A-5":[[0,1],[0,2]],"B-0":[[0,0],[0,0]],"B-1":[[0,2],[0,2]],"B-2":[[1,1],[2,0]],"B-3":[[1,2],[0,2]],"B-4":[[1,1],[0,1]],"B-5":[[2,1],[2,0]],"C-0":[[2,1],[1,0]],"C-1":[[0,1],[0,2]],"C-2":[[3,0],[3,0]],"C-3":[[2,1],[0,1]],"C-4":[[2,1],[2,0]],"C-5":[[1,0],[2,0]],"D-0":[[2,0],[1,0]],"D-1":[[1,2],[0,2]],"D-2":[[1,1],[1,0]],"D-3":[[0,2],[0,2]],"D-4":[[1,2],[0,1]],"D-5":[[0,1],[0,0]],"E-0":[[3,0],[2,0]],"E-1":[[0,2],[1,0]],"E-2":[[2,1],[2,0]],"E-3":[[1,2],[1,0]],"E-4":[[1,1],[1,0]],"E-5":[[2,0],[0,1]],"F-0":[[2,1],[2,1]],"F-1":[[1,1],[1,0]],"F-2":[[3,2],[2,0]],"F-3":[[2,0],[2,0]],"F-4":[[2,0],[3,0]],"F-5":[[2,1],[1,0]],"G-0":[[2,1],[1,0]],"G-1":[[1,1],[2,0]],"G-2":[[3,1],[2,0]],"G-3":[[1,1],[2,0]],"G-4":[[2,0],[3,1]],"G-5":[[1,1],[1,0]],"H-0":[[3,0],[2,0]],"H-1":[[1,2],[0,1]],"H-2":[[3,0],[2,0]],"H-3":[[0,2],[1,0]],"H-4":[[3,1],[1,0]],"H-5":[[2,1],[0,0]],"I-0":[[2,1],[2,0]],"I-1":[[0,2],[0,2]],"I-2":[[3,0],[2,0]],"I-3":[[2,2],[0,1]],"I-4":[[2,1],[2,1]],"I-5":[[2,1],[2,0]],"J-0":[[2,0],[1,0]],"J-1":[[1,1],[1,0]],"J-2":[[3,0],[1,0]],"J-3":[[1,1],[2,0]],"J-4":[[2,0],[4,0]],"J-5":[[2,0],[1,2]],"K-0":[[2,0],[1,0]],"K-1":[[0,1],[0,1]],"K-2":[[3,0],[2,0]],"K-3":[[2,2],[0,1]],"K-4":[[2,1],[1,0]],"K-5":[[2,0],[1,1]],"L-0":[[2,2],[1,0]],"L-1":[[2,0],[1,0]],"L-2":[[3,0],[2,0]],"L-3":[[2,0],[1,0]],"L-4":[[2,0],[4,0]],"L-5":[[2,1],[1,0]]};
-
 function splitWT(i){ const o={}; for(const k in PRED_WT) o[k]=PRED_WT[k][i]; return o; }
 
-/* ====== Externe inzendingen: bestanden in de repo die de pagina zelf inleest ======
-   Voeg een nieuwe deelnemer toe door (1) het codebestand in de repo te zetten en
-   (2) de bestandsnaam hieronder toe te voegen. */
+/* Externe inzendingen: bestanden in de repo die de pagina zelf inleest. */
 const EXTERNAL_FILES = ["mariska", "diana"];
 
-/* ====== Uitslagen uit results.js ====== */
 const R = (window.RESULTS||{matches:{},champion:"",updated:""});
 const RES = R.matches||{};
 const CHAMP_ACTUAL = R.champion||"";
@@ -143,18 +172,18 @@ let players = [
   { name:"Thijs", champ:"Nederland", pred: splitWT(1) }
 ];
 
+const PAL=["#16a34a","#0ea5e9","#8b5cf6","#ef4444","#f59e0b","#ec4899","#14b8a6","#6366f1"];
+function colorFor(i){ return PAL[i%PAL.length]; }
+function initials(n){ return (n||"?").trim().slice(0,2).toUpperCase(); }
 function sign(n){return n>0?1:n<0?-1:0;}
 function res(id){ const r=RES[id]; return (r&&r.length===2&&r[0]!=null&&r[1]!=null)?r:null; }
 
 function decodeEntry(txt){
-  txt=(txt||"").trim();
-  const i=txt.indexOf("::"); if(i>=0) txt=txt.slice(i+2);
+  txt=(txt||"").trim(); const i=txt.indexOf("::"); if(i>=0) txt=txt.slice(i+2);
   txt=txt.replace(/\s+/g,"");
-  const json=decodeURIComponent(escape(atob(txt)));
-  const d=JSON.parse(json);
+  const d=JSON.parse(decodeURIComponent(escape(atob(txt))));
   return { name:d.name||"Speler", champ:d.champ||"", pred:d.pred||{} };
 }
-
 function evalPred(pl,id){
   const r=res(id), p=pl.pred[id];
   if(!r||!p||p[0]==null||p[1]==null) return {pts:0,kind:'none'};
@@ -164,45 +193,58 @@ function evalPred(pl,id){
 }
 function champPts(pl){ return (CHAMP_ACTUAL && pl.champ===CHAMP_ACTUAL)?POINTS.champ:0; }
 function total(pl){ let t=0; for(const m of MATCHES) t+=evalPred(pl,m.id).pts; t+=champPts(pl); return t; }
-
 function groupTable(g){
   const st={}; GROUPS[g].forEach(t=>st[t]={t,P:0,W:0,GF:0,GA:0,pts:0});
-  RR.forEach((pr,i)=>{
-    const r=res(g+"-"+i); if(!r) return;
+  RR.forEach((pr,i)=>{ const r=res(g+"-"+i); if(!r) return;
     const h=GROUPS[g][pr[0]], a=GROUPS[g][pr[1]];
     st[h].P++; st[a].P++; st[h].GF+=r[0]; st[h].GA+=r[1]; st[a].GF+=r[1]; st[a].GA+=r[0];
-    if(r[0]>r[1]){st[h].W++;st[h].pts+=3;}
-    else if(r[0]<r[1]){st[a].W++;st[a].pts+=3;}
-    else {st[h].pts++;st[a].pts++;}
+    if(r[0]>r[1]){st[h].W++;st[h].pts+=3;} else if(r[0]<r[1]){st[a].W++;st[a].pts+=3;} else {st[h].pts++;st[a].pts++;}
   });
   return Object.values(st).sort((x,y)=> y.pts-x.pts || (y.GF-y.GA)-(x.GF-x.GA) || y.GF-x.GF || x.t.localeCompare(y.t));
 }
 
-/* ====== Render ====== */
+/* ===== Render ===== */
+const idxOf = pl => players.indexOf(pl);
 function renderBoard(){
-  const ranked=players.map(pl=>({pl,t:total(pl)})).sort((a,b)=>b.t-a.t);
-  const top=ranked.length?ranked[0].t:0;
-  const tie=ranked.every(o=>o.t===top);
-  document.getElementById("board").innerHTML=ranked.map((o,i)=>`
-    <div class="prow ${(!tie&&o.t===top)?'leader':''}">
-      <span class="rank">${i+1}</span>
-      <span class="nm">${o.pl.name}${(!tie&&o.t===top)?' <span class="crown">👑</span>':''}</span>
-      <span class="sc">${o.t}<small> pnt</small></span>
-    </div>`).join("");
+  const ranked=players.map(pl=>({pl,t:total(pl),ci:idxOf(pl)})).sort((a,b)=>b.t-a.t);
+  const medals=["🥇","🥈","🥉"];
+  let html="";
+  if(ranked.length>=3){
+    const top=ranked.slice(0,3);
+    html+=`<div class="podium">`+top.map((o,i)=>`
+      <div class="pod p${i+1}">
+        <div class="medal">${medals[i]}</div>
+        <div class="av" style="background:${i===0?'var(--gold)':i===1?'#9aa7b6':'#cd7f4f'}">${initials(o.pl.name)}</div>
+        <div class="nm">${o.pl.name}</div>
+        <div class="pts">${o.t} pnt</div>
+        <div class="bar">${i+1}</div>
+      </div>`).join("")+`</div>`;
+    const rest=ranked.slice(3);
+    if(rest.length) html+=`<div class="rest">`+rest.map((o,i)=>rowHTML(o,i+4)).join("")+`</div>`;
+  } else {
+    html+=`<div class="rest">`+ranked.map((o,i)=>rowHTML(o,i+1,i===0&&!ranked.every(x=>x.t===ranked[0].t)))+`</div>`;
+  }
+  document.getElementById("board").innerHTML=html;
+}
+function rowHTML(o,rank,leader){
+  return `<div class="rrow">
+    <span class="rank">${rank}</span>
+    <span class="av" style="background:${colorFor(o.ci)};color:#fff">${initials(o.pl.name)}</span>
+    <span class="nm">${o.pl.name}${leader?' 👑':''}</span>
+    <span class="pts">${o.t}<small> pnt</small></span>
+  </div>`;
 }
 function renderChamp(){
-  const lines=players.map(pl=>`${pl.name}: ${FLAG[pl.champ]||''} ${pl.champ||'—'}${CHAMP_ACTUAL&&pl.champ===CHAMP_ACTUAL?' ✓':''}`).join(" · ");
-  document.getElementById("champ").innerHTML=`🏆 <b>Wereldkampioen</b><br>${lines}`+
+  const lines=players.map(pl=>`<span class="pp">${pl.name}: ${FLAG[pl.champ]||''} ${pl.champ||'—'}${CHAMP_ACTUAL&&pl.champ===CHAMP_ACTUAL?' ✓':''}</span>`).join(" · ");
+  document.getElementById("champ").innerHTML=`<div class="h">🏆 Wereldkampioen</div>${lines}`+
     (CHAMP_ACTUAL?`<br><b>Uitslag: ${FLAG[CHAMP_ACTUAL]||''} ${CHAMP_ACTUAL}</b>`:` <span style="color:#b9740a">(nog niet bekend)</span>`);
 }
-function ptLabel(e){ return e.kind==='exact'?`+${e.pts}✓✓`:e.kind==='scored'?`+${e.pts}✓`:e.kind==='miss'?'0':'—'; }
+function ptLabel(e){ return e.kind==='exact'?`+${e.pts} ✓✓`:e.kind==='scored'?`+${e.pts} ✓`:e.kind==='miss'?'0':'—'; }
 function renderGroups(){
   document.getElementById("groups").innerHTML=Object.keys(GROUPS).map(g=>{
-    const played=RR.filter((_,i)=>res(g+"-"+i)).length;
-    const tbl=groupTable(g);
+    const played=RR.filter((_,i)=>res(g+"-"+i)).length, tbl=groupTable(g);
     return `<details class="group" ${g==="F"?"open":""}>
-      <summary><span class="gtag">Poule ${g}</span>
-        <span class="gmeta">${played}/6 gespeeld</span><span class="chev">▶</span></summary>
+      <summary><span class="gtag">Poule ${g}</span><span class="gmeta">${played}/6 gespeeld</span><span class="chev">▶</span></summary>
       <div class="gbody">
         <table class="minitbl">
           <thead><tr><th class="l">#</th><th class="l">Team</th><th>G</th><th>W</th><th>GS</th><th>DS</th><th>P</th></tr></thead>
@@ -223,7 +265,7 @@ function matchHTML(g,i){
     return `<div class="pred"><span class="who">${pl.name}</span><span class="rgt"><span class="val">${p?p[0]+'-'+p[1]:'—'}</span><span class="pt ${e.kind}">${ptLabel(e)}</span></span></div>`;
   }).join("");
   return `<div class="match">
-    <div class="line"><span class="t h">${home} <span>${FLAG[home]}</span></span>${resBox}<span class="t a"><span>${FLAG[away]}</span> ${away}</span></div>
+    <div class="mline"><span class="t h">${home} <span class="flag">${FLAG[home]}</span></span>${resBox}<span class="t a"><span class="flag">${FLAG[away]}</span> ${away}</span></div>
     <div class="preds">${cells}</div>
   </div>`;
 }
@@ -235,19 +277,15 @@ function renderProgress(){
 function renderAll(){ renderBoard(); renderChamp(); renderProgress(); renderGroups(); }
 
 document.getElementById("updated").textContent = R.updated ? ("Laatst bijgewerkt: "+R.updated) : "Nog geen uitslagen";
-renderAll();   // toon meteen Wil & Thijs
+renderAll();
 
-/* externe inzendingen ophalen en meetellen */
 (async function(){
   for(const f of EXTERNAL_FILES){
-    try{
-      const resp=await fetch(f+"?v="+Date.now());
-      if(!resp.ok) continue;
-      const t=await resp.text();
-      players.push(decodeEntry(t));
-    }catch(e){ console.warn("Kon inzending niet laden:",f,e); }
+    try{ const resp=await fetch(f+"?v="+Date.now()); if(!resp.ok) continue;
+      players.push(decodeEntry(await resp.text())); }
+    catch(e){ console.warn("Kon inzending niet laden:",f,e); }
   }
-  renderAll();   // opnieuw met alle deelnemers
+  renderAll();
 })();
 </script>
 </body>
