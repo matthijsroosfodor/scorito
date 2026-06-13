@@ -3,120 +3,100 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Scorito WK 2026 — Inschrijfformulier</title>
+<title>Scorito WK 2026 — Klassement</title>
 <style>
 :root { color-scheme: light; }
 * { box-sizing: border-box; }
 body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; background:#f4f6f8; color:#1a2230; -webkit-font-smoothing:antialiased; }
-.wrap { max-width:680px; margin:0 auto; padding:16px 14px 90px; }
-header.top { text-align:center; padding:18px 12px 10px; }
+.wrap { max-width:720px; margin:0 auto; padding:16px 14px 60px; }
+header.top { text-align:center; padding:18px 12px 6px; }
 header.top h1 { margin:0 0 2px; font-size:22px; letter-spacing:-0.3px; }
 header.top .sub { color:#6b7686; font-size:13px; }
-.card { background:#fff; border:1px solid #e3e8ef; border-radius:14px; padding:14px 16px; margin-bottom:12px; }
-.card h3 { margin:0 0 4px; font-size:15px; }
-.card .desc { font-size:12.5px; color:#6b7686; margin-bottom:10px; }
-.namebox input { width:100%; font-size:18px; font-weight:700; border:1.5px solid #d7deea; border-radius:10px; padding:11px 12px; outline:none; }
-.namebox input:focus { border-color:#1faa59; box-shadow:0 0 0 3px rgba(31,170,89,.12); }
-.intro { font-size:13px; color:#4a566e; line-height:1.5; }
+.updated { text-align:center; font-size:11.5px; color:#9aa3b2; margin-bottom:14px; }
+
+.board { background:#fff; border:1px solid #e3e8ef; border-radius:16px; box-shadow:0 4px 14px rgba(20,40,80,.06); padding:8px; margin-bottom:12px; }
+.prow { display:flex; align-items:center; gap:12px; padding:10px 12px; border-radius:12px; }
+.prow + .prow { margin-top:4px; }
+.prow.leader { background:#effaf2; }
+.prow .rank { font-size:15px; font-weight:800; color:#aab3c2; width:24px; text-align:center; }
+.prow.leader .rank { color:#1faa59; }
+.prow .nm { flex:1; font-weight:700; font-size:16px; }
+.prow .nm .crown { margin-left:6px; }
+.prow .sc { font-size:24px; font-weight:800; }
+.prow .sc small { font-size:12px; color:#6b7686; font-weight:600; }
+
+.controls { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:16px; font-size:12.5px; color:#6b7686; }
+.progress-bar { flex:1; min-width:140px; height:8px; background:#e3e8ef; border-radius:6px; overflow:hidden; }
+.progress-fill { height:100%; width:0; background:#1faa59; transition:width .3s; }
+
+.champ { background:#fff7ec; border:1px solid #f3dcb6; border-radius:12px; padding:11px 14px; margin-bottom:16px; font-size:13.5px; }
+.champ b { color:#b9740a; }
 
 .group { background:#fff; border:1px solid #e3e8ef; border-radius:14px; margin-bottom:12px; overflow:hidden; }
 .group > summary { cursor:pointer; list-style:none; padding:13px 16px; display:flex; align-items:center; gap:10px; font-weight:700; font-size:15px; background:#fafbfd; outline:none; }
 .group > summary::-webkit-details-marker { display:none; }
 .group .gtag { background:#1a2230; color:#fff; border-radius:7px; padding:2px 9px; font-size:13px; }
-.group .gteams { color:#6b7686; font-weight:500; font-size:12px; flex:1; }
+.group .gmeta { color:#9aa3b2; font-weight:500; font-size:11.5px; flex:1; text-align:right; }
 .group .chev { color:#aab3c2; transition:transform .2s; }
 .group[open] .chev { transform:rotate(90deg); }
-.matches { padding:4px 12px 12px; }
-.match { border-top:1px solid #eef1f6; padding:10px 2px; display:flex; align-items:center; gap:10px; }
+.gbody { padding:6px 14px 14px; }
+
+.minitbl { width:100%; border-collapse:collapse; font-size:12px; margin:2px 0 12px; }
+.minitbl th { color:#9aa3b2; font-weight:600; text-align:center; padding:3px 4px; font-size:10.5px; text-transform:uppercase; }
+.minitbl th.l, .minitbl td.l { text-align:left; }
+.minitbl td { padding:4px; text-align:center; border-top:1px solid #f0f3f7; }
+.minitbl td.team { font-weight:600; }
+.minitbl tr.qual td.team::after { content:" ✓"; color:#1faa59; }
+
+.match { border-top:1px solid #eef1f6; padding:11px 2px; }
 .match:first-child { border-top:none; }
-.match .teams { flex:1; font-weight:600; font-size:14px; }
-.match .teams .small { color:#9aa3b2; font-weight:500; font-size:11px; }
-.inputs { display:flex; align-items:center; gap:6px; }
-.inputs input { width:42px; height:40px; text-align:center; font-size:17px; font-weight:700; border:1.5px solid #d7deea; border-radius:9px; outline:none; -moz-appearance:textfield; }
-.inputs input::-webkit-outer-spin-button,.inputs input::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0; }
-.inputs input:focus { border-color:#1faa59; box-shadow:0 0 0 3px rgba(31,170,89,.12); }
-.inputs .dash { color:#aab3c2; font-weight:700; }
-.flag { font-size:16px; }
+.match .line { display:flex; align-items:center; justify-content:center; gap:10px; font-weight:700; font-size:15px; }
+.match .line .t { flex:1; }
+.match .line .t.h { text-align:right; }
+.match .line .t.a { text-align:left; }
+.match .line .res { background:#1a2230; color:#fff; border-radius:8px; padding:2px 10px; font-variant-numeric:tabular-nums; min-width:54px; text-align:center; }
+.match .line .res.todo { background:#e3e8ef; color:#aab3c2; }
+.preds { display:flex; gap:8px; margin-top:8px; }
+.pred { flex:1; background:#f7f9fc; border-radius:9px; padding:6px 10px; display:flex; align-items:center; justify-content:space-between; font-size:13px; }
+.pred .who { color:#6b7686; font-weight:600; }
+.pred .val { font-weight:700; }
+.pred .pt { font-size:12px; font-weight:700; margin-left:8px; }
+.pt.scored { color:#1faa59; } .pt.exact { color:#e8830c; } .pt.miss { color:#cf4b4b; } .pt.none { color:#c2cad6; }
 
-select, .scorer-row input { border:1px solid #d7deea; border-radius:8px; padding:9px 10px; font-size:14px; background:#fff; width:100%; }
-.scorer-row { display:flex; gap:8px; margin-bottom:8px; }
-.scorer-row input { flex:1; }
-.scorer-row select { width:160px; }
-
-.progress-wrap { font-size:12px; color:#6b7686; margin:2px 4px 14px; }
-.section-title { font-size:13px; font-weight:700; color:#6b7686; text-transform:uppercase; letter-spacing:.5px; margin:20px 4px 10px; }
-
-.submitbar { position:fixed; left:0; right:0; bottom:0; background:#fff; border-top:1px solid #e3e8ef; padding:12px 14px; box-shadow:0 -4px 14px rgba(20,40,80,.06); }
-.submitbar .inner { max-width:680px; margin:0 auto; display:flex; gap:10px; align-items:center; }
-button.send { flex:1; background:#1faa59; border:none; color:#fff; border-radius:10px; padding:13px; font-size:15px; font-weight:700; cursor:pointer; }
-button.send:hover { background:#18934c; }
-.hint { font-size:12px; color:#6b7686; }
-
-.result-box { background:#effaf2; border:1px solid #bce6cc; border-radius:12px; padding:14px; margin-bottom:12px; display:none; }
-.result-box.show { display:block; }
-.result-box h3 { margin:0 0 6px; font-size:15px; color:#18934c; }
-.result-box textarea { width:100%; height:90px; border:1px solid #bce6cc; border-radius:8px; padding:8px; font-family:ui-monospace,Menlo,monospace; font-size:11px; resize:vertical; }
-.result-box .row { display:flex; gap:8px; margin-top:8px; flex-wrap:wrap; }
-.result-box button { background:#fff; border:1px solid #1faa59; color:#18934c; border-radius:8px; padding:8px 14px; font-size:13px; font-weight:600; cursor:pointer; }
-.footer-note { text-align:center; color:#9aa3b2; font-size:12px; margin-top:18px; line-height:1.6; }
+.footer-note { text-align:center; color:#9aa3b2; font-size:12px; margin-top:24px; line-height:1.6; }
 </style>
 </head>
 <body>
 <div class="wrap">
   <header class="top">
-    <h1>⚽ Scorito WK 2026 — Inschrijven</h1>
-    <div class="sub">Vul je voorspellingen in en stuur ze terug</div>
+    <h1>⚽ Scorito WK 2026 — Klassement</h1>
+    <div class="sub">Live stand · automatisch bijgewerkt na elke wedstrijd</div>
   </header>
+  <div class="updated" id="updated"></div>
 
-  <div class="card namebox">
-    <h3>Je naam</h3>
-    <input type="text" id="pname" placeholder="Bijv. Fred of Diana" autocomplete="off">
+  <div class="board" id="board"></div>
+
+  <div class="controls">
+    <span id="progressText">0/72 gespeeld</span>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
   </div>
 
-  <div class="card">
-    <div class="intro">
-      Welkom! Voorspel hieronder de uitslagen vanaf <strong>Qatar – Zwitserland</strong> tot en met poule L
-      en kies je <strong>wereldkampioen</strong>.
-      Klik onderaan op <strong>Maak mijn inzending</strong> en stuur de code naar de organisator.
-      <br><span style="color:#9aa3b2">Punten: exacte uitslag 45 · toto 30 · kampioen 250.</span>
-    </div>
-  </div>
+  <div class="champ" id="champ"></div>
 
-  <div class="progress-wrap" id="progress">0 wedstrijden ingevuld</div>
-
-  <div class="section-title">🏆 Wereldkampioen</div>
-  <div class="card">
-    <div class="desc">Wie wint het WK 2026?</div>
-    <select id="champ"></select>
-  </div>
-
-  <div class="section-title">📋 Wedstrijden</div>
   <div id="groups"></div>
 
-  <div class="result-box" id="resultBox">
-    <h3>✓ Je inzending is klaar</h3>
-    <div style="font-size:12.5px;color:#4a566e;margin-bottom:6px">Kopieer deze code en stuur 'm naar de organisator (WhatsApp of mail):</div>
-    <textarea id="resultCode" readonly></textarea>
-    <div class="row">
-      <button id="copyCode">📋 Kopieer code</button>
-      <button id="copyText">📝 Kopieer leesbaar overzicht</button>
-    </div>
-  </div>
-
   <div class="footer-note">
-    Je voortgang wordt automatisch bewaard in deze browser, dus je kunt tussendoor stoppen.
+    Puntentelling: exacte uitslag 45 · juiste toto 30 · groepsstand 25 p/positie · wereldkampioen 250.<br>
+    Uitslagen worden automatisch bijgehouden — ververs de pagina voor de nieuwste stand.
   </div>
 </div>
 
-<div class="submitbar">
-  <div class="inner">
-    <span class="hint" id="barhint">Vul je naam in om te beginnen</span>
-    <button class="send" id="sendBtn">Maak mijn inzending</button>
-  </div>
-</div>
-
+<!-- Uitslagen (door Claude Code bijgewerkt) -->
+<script src="results.js"></script>
 <script>
+/* ====== Vaste gegevens ====== */
 const GROUPS = {
+  A:["Mexico","Zuid-Afrika","Zuid-Korea","Tsjechië"],
   B:["Canada","Bosnië-Herz.","Qatar","Zwitserland"],
   C:["Brazilië","Marokko","Haïti","Schotland"],
   D:["Verenigde Staten","Paraguay","Australië","Turkije"],
@@ -129,127 +109,137 @@ const GROUPS = {
   K:["Portugal","Congo","Oezbekistan","Colombia"],
   L:["Engeland","Kroatië","Ghana","Panama"]
 };
-const ALL_GROUPS = {A:["Mexico","Zuid-Afrika","Zuid-Korea","Tsjechië"],...GROUPS};
 const FLAG = {
-  "Mexico":"🇲🇽","Zuid-Afrika":"🇿🇦","Zuid-Korea":"🇰🇷","Tsjechië":"🇨🇿",
-  "Canada":"🇨🇦","Bosnië-Herz.":"🇧🇦","Qatar":"🇶🇦","Zwitserland":"🇨🇭",
-  "Brazilië":"🇧🇷","Marokko":"🇲🇦","Haïti":"🇭🇹","Schotland":"🏴󠁧󠁢󠁳󠁣󠁴󠁿",
-  "Verenigde Staten":"🇺🇸","Paraguay":"🇵🇾","Australië":"🇦🇺","Turkije":"🇹🇷",
-  "Duitsland":"🇩🇪","Curaçao":"🇨🇼","Ivoorkust":"🇨🇮","Ecuador":"🇪🇨",
-  "Nederland":"🇳🇱","Japan":"🇯🇵","Zweden":"🇸🇪","Tunesië":"🇹🇳",
-  "België":"🇧🇪","Egypte":"🇪🇬","Iran":"🇮🇷","Nieuw-Zeeland":"🇳🇿",
-  "Spanje":"🇪🇸","Kaapverdië":"🇨🇻","Saoedi-Arabië":"🇸🇦","Uruguay":"🇺🇾",
-  "Frankrijk":"🇫🇷","Senegal":"🇸🇳","Irak":"🇮🇶","Noorwegen":"🇳🇴",
-  "Argentinië":"🇦🇷","Algerije":"🇩🇿","Oostenrijk":"🇦🇹","Jordanië":"🇯🇴",
-  "Portugal":"🇵🇹","Congo":"🇨🇬","Oezbekistan":"🇺🇿","Colombia":"🇨🇴",
-  "Engeland":"🏴󠁧󠁢󠁥󠁮󠁧󠁿","Kroatië":"🇭🇷","Ghana":"🇬🇭","Panama":"🇵🇦"
+  "Mexico":"🇲🇽","Zuid-Afrika":"🇿🇦","Zuid-Korea":"🇰🇷","Tsjechië":"🇨🇿","Canada":"🇨🇦","Bosnië-Herz.":"🇧🇦","Qatar":"🇶🇦","Zwitserland":"🇨🇭",
+  "Brazilië":"🇧🇷","Marokko":"🇲🇦","Haïti":"🇭🇹","Schotland":"🏴󠁧󠁢󠁳󠁣󠁴󠁿","Verenigde Staten":"🇺🇸","Paraguay":"🇵🇾","Australië":"🇦🇺","Turkije":"🇹🇷",
+  "Duitsland":"🇩🇪","Curaçao":"🇨🇼","Ivoorkust":"🇨🇮","Ecuador":"🇪🇨","Nederland":"🇳🇱","Japan":"🇯🇵","Zweden":"🇸🇪","Tunesië":"🇹🇳",
+  "België":"🇧🇪","Egypte":"🇪🇬","Iran":"🇮🇷","Nieuw-Zeeland":"🇳🇿","Spanje":"🇪🇸","Kaapverdië":"🇨🇻","Saoedi-Arabië":"🇸🇦","Uruguay":"🇺🇾",
+  "Frankrijk":"🇫🇷","Senegal":"🇸🇳","Irak":"🇮🇶","Noorwegen":"🇳🇴","Argentinië":"🇦🇷","Algerije":"🇩🇿","Oostenrijk":"🇦🇹","Jordanië":"🇯🇴",
+  "Portugal":"🇵🇹","Congo":"🇨🇬","Oezbekistan":"🇺🇿","Colombia":"🇨🇴","Engeland":"🏴󠁧󠁢󠁥󠁮󠁧󠁿","Kroatië":"🇭🇷","Ghana":"🇬🇭","Panama":"🇵🇦"
 };
 const RR=[[0,1],[2,3],[0,2],[1,3],[0,3],[1,2]];
-// build match list from Qatar-Zwitserland onward: poule B index 1..5, poules C-L all
 const MATCHES=[];
-for(const g of Object.keys(GROUPS)){
-  RR.forEach((p,i)=>{
-    if(g==="B" && i===0) return; // skip Canada-Bosnië (al gespeeld)
-    MATCHES.push({id:g+"-"+i,group:g,home:GROUPS[g][p[0]],away:GROUPS[g][p[1]]});
+for(const g of Object.keys(GROUPS)) RR.forEach((p,i)=>MATCHES.push({id:g+"-"+i,group:g,home:GROUPS[g][p[0]],away:GROUPS[g][p[1]]}));
+
+const POINTS={exact:45,toto:30,stand:25,champ:250};
+
+/* Spelers + voorspellingen (vast ingebakken) */
+const PLAYERS=["Wil","Thijs"];
+const CHAMP_PRED=["Nederland","Nederland"];
+const PRED={"A-0":[[0,0],[0,0]],"A-1":[[0,0],[0,0]],"A-2":[[2,1],[0,1]],"A-3":[[1,0],[0,1]],"A-4":[[2,1],[1,0]],"A-5":[[0,1],[0,2]],"B-0":[[0,0],[0,0]],"B-1":[[0,2],[0,2]],"B-2":[[1,1],[2,0]],"B-3":[[1,2],[0,2]],"B-4":[[1,1],[0,1]],"B-5":[[2,1],[2,0]],"C-0":[[2,1],[1,0]],"C-1":[[0,1],[0,2]],"C-2":[[3,0],[3,0]],"C-3":[[2,1],[0,1]],"C-4":[[2,1],[2,0]],"C-5":[[1,0],[2,0]],"D-0":[[2,0],[1,0]],"D-1":[[1,2],[0,2]],"D-2":[[1,1],[1,0]],"D-3":[[0,2],[0,2]],"D-4":[[1,2],[0,1]],"D-5":[[0,1],[0,0]],"E-0":[[3,0],[2,0]],"E-1":[[0,2],[1,0]],"E-2":[[2,1],[2,0]],"E-3":[[1,2],[1,0]],"E-4":[[1,1],[1,0]],"E-5":[[2,0],[0,1]],"F-0":[[2,1],[2,1]],"F-1":[[1,1],[1,0]],"F-2":[[3,2],[2,0]],"F-3":[[2,0],[2,0]],"F-4":[[2,0],[3,0]],"F-5":[[2,1],[1,0]],"G-0":[[2,1],[1,0]],"G-1":[[1,1],[2,0]],"G-2":[[3,1],[2,0]],"G-3":[[1,1],[2,0]],"G-4":[[2,0],[3,1]],"G-5":[[1,1],[1,0]],"H-0":[[3,0],[2,0]],"H-1":[[1,2],[0,1]],"H-2":[[3,0],[2,0]],"H-3":[[0,2],[1,0]],"H-4":[[3,1],[1,0]],"H-5":[[2,1],[0,0]],"I-0":[[2,1],[2,0]],"I-1":[[0,2],[0,2]],"I-2":[[3,0],[2,0]],"I-3":[[2,2],[0,1]],"I-4":[[2,1],[2,1]],"I-5":[[2,1],[2,0]],"J-0":[[2,0],[1,0]],"J-1":[[1,1],[1,0]],"J-2":[[3,0],[1,0]],"J-3":[[1,1],[2,0]],"J-4":[[2,0],[4,0]],"J-5":[[2,0],[1,2]],"K-0":[[2,0],[1,0]],"K-1":[[0,1],[0,1]],"K-2":[[3,0],[2,0]],"K-3":[[2,2],[0,1]],"K-4":[[2,1],[1,0]],"K-5":[[2,0],[1,1]],"L-0":[[2,2],[1,0]],"L-1":[[2,0],[1,0]],"L-2":[[3,0],[2,0]],"L-3":[[2,0],[1,0]],"L-4":[[2,0],[4,0]],"L-5":[[2,1],[1,0]]};
+
+/* Standen-voorspellingen (leeg voor Wil & Thijs) */
+const STAND_PRED={};   // bv. {F:[{Nederland:1,...},{...}]}
+
+/* ====== Uitslagen uit results.js ====== */
+const R = (window.RESULTS||{matches:{},champion:"",updated:""});
+const RES = R.matches||{};
+const CHAMP_ACTUAL = R.champion||"";
+
+function sign(n){return n>0?1:n<0?-1:0;}
+function res(id){ const r=RES[id]; return (r&&r.length===2&&r[0]!=null&&r[1]!=null)?r:null; }
+
+function evalPred(id,pi){
+  const r=res(id), p=PRED[id]&&PRED[id][pi];
+  if(!r||!p) return {pts:0,kind:'none'};
+  if(p[0]===r[0]&&p[1]===r[1]) return {pts:POINTS.exact,kind:'exact'};
+  if(sign(p[0]-p[1])===sign(r[0]-r[1])) return {pts:POINTS.toto,kind:'scored'};
+  return {pts:0,kind:'miss'};
+}
+function groupTable(g){
+  const st={}; GROUPS[g].forEach(t=>st[t]={t,P:0,W:0,D:0,L:0,GF:0,GA:0,pts:0});
+  RR.forEach((pr,i)=>{
+    const r=res(g+"-"+i); if(!r) return;
+    const h=GROUPS[g][pr[0]], a=GROUPS[g][pr[1]];
+    st[h].P++; st[a].P++; st[h].GF+=r[0]; st[h].GA+=r[1]; st[a].GF+=r[1]; st[a].GA+=r[0];
+    if(r[0]>r[1]){st[h].W++;st[a].L++;st[h].pts+=3;}
+    else if(r[0]<r[1]){st[a].W++;st[h].L++;st[a].pts+=3;}
+    else {st[h].D++;st[a].D++;st[h].pts++;st[a].pts++;}
+  });
+  return Object.values(st).sort((x,y)=> y.pts-x.pts || (y.GF-y.GA)-(x.GF-x.GA) || y.GF-x.GF || x.t.localeCompare(y.t));
+}
+function groupComplete(g){ return RR.every((_,i)=>res(g+"-"+i)); }
+function standPts(g,pi){
+  const pred=STAND_PRED[g]&&STAND_PRED[g][pi]; if(!pred||!groupComplete(g)) return 0;
+  const order=groupTable(g); let pts=0;
+  order.forEach((row,idx)=>{ if(pred[row.t]===idx+1) pts+=POINTS.stand; });
+  return pts;
+}
+function champPts(pi){ return (CHAMP_ACTUAL && CHAMP_PRED[pi]===CHAMP_ACTUAL)?POINTS.champ:0; }
+function totals(){
+  return PLAYERS.map((_,i)=>{
+    let t=0; for(const m of MATCHES) t+=evalPred(m.id,i).pts;
+    for(const g of Object.keys(GROUPS)) t+=standPts(g,i);
+    t+=champPts(i); return t;
   });
 }
-const ALL_TEAMS=[...new Set(Object.values(ALL_GROUPS).flat())].sort((a,b)=>a.localeCompare(b,'nl'));
-const POS=[["att","Aanvaller"],["mid","Middenvelder"],["def","Verdediger / keeper"]];
 
-const KEY="scorito_inschrijf_v1";
-let data = load();
-function load(){ try{ const s=JSON.parse(localStorage.getItem(KEY)); if(s) return s; }catch(e){} return {name:"",champ:"",pred:{}}; }
-function save(){ localStorage.setItem(KEY, JSON.stringify(data)); }
-function num(v){ return (v===""||v==null||isNaN(v))?null:parseInt(v,10); }
-
-// champion select
-const champSel=document.getElementById("champ");
-champSel.innerHTML=`<option value="">— kies land —</option>`+ALL_TEAMS.map(t=>`<option value="${t}">${FLAG[t]} ${t}</option>`).join("");
-champSel.value=data.champ||"";
-champSel.addEventListener("change",e=>{data.champ=e.target.value;save();});
-
-const nameInp=document.getElementById("pname");
-nameInp.value=data.name||"";
-nameInp.addEventListener("input",e=>{data.name=e.target.value;save();updateBar();});
-
+/* ====== Render ====== */
+function renderBoard(){
+  const t=totals();
+  const order=PLAYERS.map((nm,i)=>({nm,i,t:t[i]})).sort((a,b)=>b.t-a.t);
+  const top=order[0].t, tie=order.every(o=>o.t===top);
+  document.getElementById("board").innerHTML=order.map((o,rank)=>`
+    <div class="prow ${(!tie&&o.t===top)?'leader':''}">
+      <span class="rank">${rank+1}</span>
+      <span class="nm">${o.nm}${(!tie&&o.t===top)?' <span class="crown">👑</span>':''}</span>
+      <span class="sc">${o.t}<small> pnt</small></span>
+    </div>`).join("");
+}
+function renderChamp(){
+  const won=t=>CHAMP_ACTUAL===t?' ✓':'';
+  document.getElementById("champ").innerHTML=
+    `🏆 <b>Wereldkampioen</b> — ${PLAYERS[0]}: ${FLAG[CHAMP_PRED[0]]||''} ${CHAMP_PRED[0]}${won(CHAMP_PRED[0])} · `+
+    `${PLAYERS[1]}: ${FLAG[CHAMP_PRED[1]]||''} ${CHAMP_PRED[1]}${won(CHAMP_PRED[1])}`+
+    (CHAMP_ACTUAL?` · <b>uitslag: ${FLAG[CHAMP_ACTUAL]||''} ${CHAMP_ACTUAL}</b>`:` <span style="color:#b9740a">(nog niet bekend)</span>`);
+}
+function ptLabel(e){ return e.kind==='exact'?`+${e.pts} ✓✓`:e.kind==='scored'?`+${e.pts} ✓`:e.kind==='miss'?'0':'—'; }
 function renderGroups(){
-  const wrap=document.getElementById("groups");
-  wrap.innerHTML=Object.keys(GROUPS).map(g=>{
-    const ms=MATCHES.filter(m=>m.group===g);
-    if(!ms.length) return "";
-    return `<details class="group" open>
-      <summary>
-        <span class="gtag">Poule ${g}</span>
-        <span class="gteams">${GROUPS[g].map(t=>FLAG[t]).join(" ")} ${GROUPS[g].join(" · ")}</span>
-        <span class="chev">▶</span>
-      </summary>
-      <div class="matches">${ms.map(matchHTML).join("")}</div>
-    </details>`;
+  document.getElementById("groups").innerHTML=Object.keys(GROUPS).map(g=>{
+    const played=RR.filter((_,i)=>res(g+"-"+i)).length;
+    const tbl=groupTable(g);
+    const open = g==="F" ? "open" : "";
+    return `<details class="group" ${open}>
+      <summary><span class="gtag">Poule ${g}</span>
+        <span class="gmeta">${played}/6 gespeeld</span><span class="chev">▶</span></summary>
+      <div class="gbody">
+        <table class="minitbl">
+          <thead><tr><th class="l">#</th><th class="l">Team</th><th>G</th><th>W</th><th>GS</th><th>DS</th><th>P</th></tr></thead>
+          <tbody>${tbl.map((r,idx)=>`<tr class="${idx<2?'qual':''}">
+            <td class="l">${idx+1}</td><td class="l team">${FLAG[r.t]} ${r.t}</td>
+            <td>${r.P}</td><td>${r.W}</td><td>${r.GF}-${r.GA}</td><td>${r.GF-r.GA>0?'+':''}${r.GF-r.GA}</td><td><b>${r.pts}</b></td>
+          </tr>`).join("")}</tbody>
+        </table>
+        ${RR.map((pr,i)=>matchHTML(g,i)).join("")}
+      </div></details>`;
   }).join("");
-  wrap.querySelectorAll("input.sc").forEach(inp=>inp.addEventListener("input",onInput));
 }
-function matchHTML(m){
-  const p=data.pred[m.id]||[null,null]; const v=x=>x==null?"":x;
+function matchHTML(g,i){
+  const id=g+"-"+i, home=GROUPS[g][RR[i][0]], away=GROUPS[g][RR[i][1]];
+  const r=res(id);
+  const resBox = r ? `<span class="res">${r[0]} - ${r[1]}</span>` : `<span class="res todo">– : –</span>`;
+  const cell=pi=>{ const e=evalPred(id,pi); const p=PRED[id]&&PRED[id][pi];
+    return `<div class="pred"><span class="who">${PLAYERS[pi]}</span>
+      <span><span class="val">${p?p[0]+'-'+p[1]:'—'}</span><span class="pt ${e.kind}">${ptLabel(e)}</span></span></div>`; };
   return `<div class="match">
-    <div class="teams">${FLAG[m.home]} ${m.home} <span class="small">vs</span> ${FLAG[m.away]} ${m.away}</div>
-    <div class="inputs">
-      <input class="sc" type="number" min="0" inputmode="numeric" data-id="${m.id}" data-pos="0" value="${v(p[0])}">
-      <span class="dash">–</span>
-      <input class="sc" type="number" min="0" inputmode="numeric" data-id="${m.id}" data-pos="1" value="${v(p[1])}">
-    </div></div>`;
+    <div class="line"><span class="t h">${home} <span>${FLAG[home]}</span></span>${resBox}<span class="t a"><span>${FLAG[away]}</span> ${away}</span></div>
+    <div class="preds">${cell(0)}${cell(1)}</div>
+  </div>`;
 }
-function onInput(e){
-  const {id,pos}=e.target.dataset, val=num(e.target.value);
-  data.pred[id]=data.pred[id]||[null,null]; data.pred[id][+pos]=val;
-  if(data.pred[id][0]==null&&data.pred[id][1]==null) delete data.pred[id];
-  save(); updateProgress();
+function renderProgress(){
+  const done=MATCHES.filter(m=>res(m.id)).length;
+  document.getElementById("progressText").textContent=done+"/72 gespeeld";
+  document.getElementById("progressFill").style.width=(done/72*100)+"%";
 }
-function filledCount(){ return MATCHES.filter(m=>{const p=data.pred[m.id];return p&&p[0]!=null&&p[1]!=null;}).length; }
-function updateProgress(){ document.getElementById("progress").textContent=`${filledCount()} / ${MATCHES.length} wedstrijden ingevuld`; }
-function updateBar(){
-  const h=document.getElementById("barhint");
-  h.textContent = data.name.trim() ? `Hoi ${data.name.trim()} 👋 vul gerust verder in` : "Vul je naam in om te beginnen";
+function renderUpdated(){
+  document.getElementById("updated").textContent = R.updated ? ("Laatst bijgewerkt: "+R.updated) : "Nog geen uitslagen";
 }
 
-function buildCode(){
-  const payload={ v:1, name:data.name.trim(), champ:data.champ, pred:data.pred };
-  return "SCORITO-INZENDING::"+btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
-}
-function buildText(){
-  let t=`Scorito WK 2026 — inzending van ${data.name.trim()||"(naam ontbreekt)"}\n`;
-  t+=`Wereldkampioen: ${data.champ||"-"}\n\n`;
-  for(const g of Object.keys(GROUPS)){
-    const ms=MATCHES.filter(m=>m.group===g); if(!ms.length) continue;
-    t+=`Poule ${g}\n`;
-    for(const m of ms){ const p=data.pred[m.id]; t+=`  ${m.home} - ${m.away}: ${p&&p[0]!=null?p[0]+"-"+p[1]:"—"}\n`; }
-    t+="\n";
-  }
-  return t.trim();
-}
-
-document.getElementById("sendBtn").addEventListener("click",()=>{
-  if(!data.name.trim()){ alert("Vul eerst je naam in."); nameInp.focus(); return; }
-  const code=buildCode();
-  document.getElementById("resultCode").value=code;
-  document.getElementById("resultBox").classList.add("show");
-  document.getElementById("resultBox").scrollIntoView({behavior:"smooth"});
-});
-document.getElementById("copyCode").addEventListener("click",()=>{
-  const ta=document.getElementById("resultCode"); ta.select();
-  if(navigator.clipboard) navigator.clipboard.writeText(ta.value).catch(()=>{});
-  document.getElementById("copyCode").textContent="✓ Gekopieerd";
-  setTimeout(()=>document.getElementById("copyCode").textContent="📋 Kopieer code",2500);
-});
-document.getElementById("copyText").addEventListener("click",()=>{
-  const txt=buildText();
-  if(navigator.clipboard) navigator.clipboard.writeText(txt).catch(()=>{});
-  document.getElementById("copyText").textContent="✓ Gekopieerd";
-  setTimeout(()=>document.getElementById("copyText").textContent="📝 Kopieer leesbaar overzicht",2500);
-});
-
+renderUpdated();
+renderBoard();
+renderChamp();
+renderProgress();
 renderGroups();
-updateProgress();
-updateBar();
 </script>
 </body>
 </html>
