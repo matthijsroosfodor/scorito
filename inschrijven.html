@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scorito WK 2026 — Inschrijfformulier</title>
+<style>
+:root { color-scheme: light; }
+* { box-sizing: border-box; }
+body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; background:#f4f6f8; color:#1a2230; -webkit-font-smoothing:antialiased; }
+.wrap { max-width:680px; margin:0 auto; padding:16px 14px 90px; }
+header.top { text-align:center; padding:18px 12px 10px; }
+header.top h1 { margin:0 0 2px; font-size:22px; letter-spacing:-0.3px; }
+header.top .sub { color:#6b7686; font-size:13px; }
+.card { background:#fff; border:1px solid #e3e8ef; border-radius:14px; padding:14px 16px; margin-bottom:12px; }
+.card h3 { margin:0 0 4px; font-size:15px; }
+.card .desc { font-size:12.5px; color:#6b7686; margin-bottom:10px; }
+.namebox input { width:100%; font-size:18px; font-weight:700; border:1.5px solid #d7deea; border-radius:10px; padding:11px 12px; outline:none; }
+.namebox input:focus { border-color:#1faa59; box-shadow:0 0 0 3px rgba(31,170,89,.12); }
+.intro { font-size:13px; color:#4a566e; line-height:1.5; }
+
+.group { background:#fff; border:1px solid #e3e8ef; border-radius:14px; margin-bottom:12px; overflow:hidden; }
+.group > summary { cursor:pointer; list-style:none; padding:13px 16px; display:flex; align-items:center; gap:10px; font-weight:700; font-size:15px; background:#fafbfd; outline:none; }
+.group > summary::-webkit-details-marker { display:none; }
+.group .gtag { background:#1a2230; color:#fff; border-radius:7px; padding:2px 9px; font-size:13px; }
+.group .gteams { color:#6b7686; font-weight:500; font-size:12px; flex:1; }
+.group .chev { color:#aab3c2; transition:transform .2s; }
+.group[open] .chev { transform:rotate(90deg); }
+.matches { padding:4px 12px 12px; }
+.match { border-top:1px solid #eef1f6; padding:10px 2px; display:flex; align-items:center; gap:10px; }
+.match:first-child { border-top:none; }
+.match .teams { flex:1; font-weight:600; font-size:14px; }
+.match .teams .small { color:#9aa3b2; font-weight:500; font-size:11px; }
+.inputs { display:flex; align-items:center; gap:6px; }
+.inputs input { width:42px; height:40px; text-align:center; font-size:17px; font-weight:700; border:1.5px solid #d7deea; border-radius:9px; outline:none; -moz-appearance:textfield; }
+.inputs input::-webkit-outer-spin-button,.inputs input::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0; }
+.inputs input:focus { border-color:#1faa59; box-shadow:0 0 0 3px rgba(31,170,89,.12); }
+.inputs .dash { color:#aab3c2; font-weight:700; }
+.flag { font-size:16px; }
+
+select, .scorer-row input { border:1px solid #d7deea; border-radius:8px; padding:9px 10px; font-size:14px; background:#fff; width:100%; }
+.scorer-row { display:flex; gap:8px; margin-bottom:8px; }
+.scorer-row input { flex:1; }
+.scorer-row select { width:160px; }
+
+.progress-wrap { font-size:12px; color:#6b7686; margin:2px 4px 14px; }
+.section-title { font-size:13px; font-weight:700; color:#6b7686; text-transform:uppercase; letter-spacing:.5px; margin:20px 4px 10px; }
+
+.submitbar { position:fixed; left:0; right:0; bottom:0; background:#fff; border-top:1px solid #e3e8ef; padding:12px 14px; box-shadow:0 -4px 14px rgba(20,40,80,.06); }
+.submitbar .inner { max-width:680px; margin:0 auto; display:flex; gap:10px; align-items:center; }
+button.send { flex:1; background:#1faa59; border:none; color:#fff; border-radius:10px; padding:13px; font-size:15px; font-weight:700; cursor:pointer; }
+button.send:hover { background:#18934c; }
+.hint { font-size:12px; color:#6b7686; }
+
+.result-box { background:#effaf2; border:1px solid #bce6cc; border-radius:12px; padding:14px; margin-bottom:12px; display:none; }
+.result-box.show { display:block; }
+.result-box h3 { margin:0 0 6px; font-size:15px; color:#18934c; }
+.result-box textarea { width:100%; height:90px; border:1px solid #bce6cc; border-radius:8px; padding:8px; font-family:ui-monospace,Menlo,monospace; font-size:11px; resize:vertical; }
+.result-box .row { display:flex; gap:8px; margin-top:8px; flex-wrap:wrap; }
+.result-box button { background:#fff; border:1px solid #1faa59; color:#18934c; border-radius:8px; padding:8px 14px; font-size:13px; font-weight:600; cursor:pointer; }
+.footer-note { text-align:center; color:#9aa3b2; font-size:12px; margin-top:18px; line-height:1.6; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <h1>⚽ Scorito WK 2026 — Inschrijven</h1>
+    <div class="sub">Vul je voorspellingen in en stuur ze terug</div>
+  </header>
+
+  <div class="card namebox">
+    <h3>Je naam</h3>
+    <input type="text" id="pname" placeholder="Bijv. Fred of Diana" autocomplete="off">
+  </div>
+
+  <div class="card">
+    <div class="intro">
+      Welkom! Voorspel hieronder de uitslagen vanaf <strong>Qatar – Zwitserland</strong> tot en met poule L
+      en kies je <strong>wereldkampioen</strong>.
+      Klik onderaan op <strong>Maak mijn inzending</strong> en stuur de code naar de organisator.
+      <br><span style="color:#9aa3b2">Punten: exacte uitslag 45 · toto 30 · kampioen 250.</span>
+    </div>
+  </div>
+
+  <div class="progress-wrap" id="progress">0 wedstrijden ingevuld</div>
+
+  <div class="section-title">🏆 Wereldkampioen</div>
+  <div class="card">
+    <div class="desc">Wie wint het WK 2026?</div>
+    <select id="champ"></select>
+  </div>
+
+  <div class="section-title">📋 Wedstrijden</div>
+  <div id="groups"></div>
+
+  <div class="result-box" id="resultBox">
+    <h3>✓ Je inzending is klaar</h3>
+    <div style="font-size:12.5px;color:#4a566e;margin-bottom:6px">Kopieer deze code en stuur 'm naar de organisator (WhatsApp of mail):</div>
+    <textarea id="resultCode" readonly></textarea>
+    <div class="row">
+      <button id="copyCode">📋 Kopieer code</button>
+      <button id="copyText">📝 Kopieer leesbaar overzicht</button>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    Je voortgang wordt automatisch bewaard in deze browser, dus je kunt tussendoor stoppen.
+  </div>
+</div>
+
+<div class="submitbar">
+  <div class="inner">
+    <span class="hint" id="barhint">Vul je naam in om te beginnen</span>
+    <button class="send" id="sendBtn">Maak mijn inzending</button>
+  </div>
+</div>
+
+<script>
+const GROUPS = {
+  B:["Canada","Bosnië-Herz.","Qatar","Zwitserland"],
+  C:["Brazilië","Marokko","Haïti","Schotland"],
+  D:["Verenigde Staten","Paraguay","Australië","Turkije"],
+  E:["Duitsland","Curaçao","Ivoorkust","Ecuador"],
+  F:["Nederland","Japan","Zweden","Tunesië"],
+  G:["België","Egypte","Iran","Nieuw-Zeeland"],
+  H:["Spanje","Kaapverdië","Saoedi-Arabië","Uruguay"],
+  I:["Frankrijk","Senegal","Irak","Noorwegen"],
+  J:["Argentinië","Algerije","Oostenrijk","Jordanië"],
+  K:["Portugal","Congo","Oezbekistan","Colombia"],
+  L:["Engeland","Kroatië","Ghana","Panama"]
+};
+const ALL_GROUPS = {A:["Mexico","Zuid-Afrika","Zuid-Korea","Tsjechië"],...GROUPS};
+const FLAG = {
+  "Mexico":"🇲🇽","Zuid-Afrika":"🇿🇦","Zuid-Korea":"🇰🇷","Tsjechië":"🇨🇿",
+  "Canada":"🇨🇦","Bosnië-Herz.":"🇧🇦","Qatar":"🇶🇦","Zwitserland":"🇨🇭",
+  "Brazilië":"🇧🇷","Marokko":"🇲🇦","Haïti":"🇭🇹","Schotland":"🏴󠁧󠁢󠁳󠁣󠁴󠁿",
+  "Verenigde Staten":"🇺🇸","Paraguay":"🇵🇾","Australië":"🇦🇺","Turkije":"🇹🇷",
+  "Duitsland":"🇩🇪","Curaçao":"🇨🇼","Ivoorkust":"🇨🇮","Ecuador":"🇪🇨",
+  "Nederland":"🇳🇱","Japan":"🇯🇵","Zweden":"🇸🇪","Tunesië":"🇹🇳",
+  "België":"🇧🇪","Egypte":"🇪🇬","Iran":"🇮🇷","Nieuw-Zeeland":"🇳🇿",
+  "Spanje":"🇪🇸","Kaapverdië":"🇨🇻","Saoedi-Arabië":"🇸🇦","Uruguay":"🇺🇾",
+  "Frankrijk":"🇫🇷","Senegal":"🇸🇳","Irak":"🇮🇶","Noorwegen":"🇳🇴",
+  "Argentinië":"🇦🇷","Algerije":"🇩🇿","Oostenrijk":"🇦🇹","Jordanië":"🇯🇴",
+  "Portugal":"🇵🇹","Congo":"🇨🇬","Oezbekistan":"🇺🇿","Colombia":"🇨🇴",
+  "Engeland":"🏴󠁧󠁢󠁥󠁮󠁧󠁿","Kroatië":"🇭🇷","Ghana":"🇬🇭","Panama":"🇵🇦"
+};
+const RR=[[0,1],[2,3],[0,2],[1,3],[0,3],[1,2]];
+// build match list from Qatar-Zwitserland onward: poule B index 1..5, poules C-L all
+const MATCHES=[];
+for(const g of Object.keys(GROUPS)){
+  RR.forEach((p,i)=>{
+    if(g==="B" && i===0) return; // skip Canada-Bosnië (al gespeeld)
+    MATCHES.push({id:g+"-"+i,group:g,home:GROUPS[g][p[0]],away:GROUPS[g][p[1]]});
+  });
+}
+const ALL_TEAMS=[...new Set(Object.values(ALL_GROUPS).flat())].sort((a,b)=>a.localeCompare(b,'nl'));
+const POS=[["att","Aanvaller"],["mid","Middenvelder"],["def","Verdediger / keeper"]];
+
+const KEY="scorito_inschrijf_v1";
+let data = load();
+function load(){ try{ const s=JSON.parse(localStorage.getItem(KEY)); if(s) return s; }catch(e){} return {name:"",champ:"",pred:{}}; }
+function save(){ localStorage.setItem(KEY, JSON.stringify(data)); }
+function num(v){ return (v===""||v==null||isNaN(v))?null:parseInt(v,10); }
+
+// champion select
+const champSel=document.getElementById("champ");
+champSel.innerHTML=`<option value="">— kies land —</option>`+ALL_TEAMS.map(t=>`<option value="${t}">${FLAG[t]} ${t}</option>`).join("");
+champSel.value=data.champ||"";
+champSel.addEventListener("change",e=>{data.champ=e.target.value;save();});
+
+const nameInp=document.getElementById("pname");
+nameInp.value=data.name||"";
+nameInp.addEventListener("input",e=>{data.name=e.target.value;save();updateBar();});
+
+function renderGroups(){
+  const wrap=document.getElementById("groups");
+  wrap.innerHTML=Object.keys(GROUPS).map(g=>{
+    const ms=MATCHES.filter(m=>m.group===g);
+    if(!ms.length) return "";
+    return `<details class="group" open>
+      <summary>
+        <span class="gtag">Poule ${g}</span>
+        <span class="gteams">${GROUPS[g].map(t=>FLAG[t]).join(" ")} ${GROUPS[g].join(" · ")}</span>
+        <span class="chev">▶</span>
+      </summary>
+      <div class="matches">${ms.map(matchHTML).join("")}</div>
+    </details>`;
+  }).join("");
+  wrap.querySelectorAll("input.sc").forEach(inp=>inp.addEventListener("input",onInput));
+}
+function matchHTML(m){
+  const p=data.pred[m.id]||[null,null]; const v=x=>x==null?"":x;
+  return `<div class="match">
+    <div class="teams">${FLAG[m.home]} ${m.home} <span class="small">vs</span> ${FLAG[m.away]} ${m.away}</div>
+    <div class="inputs">
+      <input class="sc" type="number" min="0" inputmode="numeric" data-id="${m.id}" data-pos="0" value="${v(p[0])}">
+      <span class="dash">–</span>
+      <input class="sc" type="number" min="0" inputmode="numeric" data-id="${m.id}" data-pos="1" value="${v(p[1])}">
+    </div></div>`;
+}
+function onInput(e){
+  const {id,pos}=e.target.dataset, val=num(e.target.value);
+  data.pred[id]=data.pred[id]||[null,null]; data.pred[id][+pos]=val;
+  if(data.pred[id][0]==null&&data.pred[id][1]==null) delete data.pred[id];
+  save(); updateProgress();
+}
+function filledCount(){ return MATCHES.filter(m=>{const p=data.pred[m.id];return p&&p[0]!=null&&p[1]!=null;}).length; }
+function updateProgress(){ document.getElementById("progress").textContent=`${filledCount()} / ${MATCHES.length} wedstrijden ingevuld`; }
+function updateBar(){
+  const h=document.getElementById("barhint");
+  h.textContent = data.name.trim() ? `Hoi ${data.name.trim()} 👋 vul gerust verder in` : "Vul je naam in om te beginnen";
+}
+
+function buildCode(){
+  const payload={ v:1, name:data.name.trim(), champ:data.champ, pred:data.pred };
+  return "SCORITO-INZENDING::"+btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
+}
+function buildText(){
+  let t=`Scorito WK 2026 — inzending van ${data.name.trim()||"(naam ontbreekt)"}\n`;
+  t+=`Wereldkampioen: ${data.champ||"-"}\n\n`;
+  for(const g of Object.keys(GROUPS)){
+    const ms=MATCHES.filter(m=>m.group===g); if(!ms.length) continue;
+    t+=`Poule ${g}\n`;
+    for(const m of ms){ const p=data.pred[m.id]; t+=`  ${m.home} - ${m.away}: ${p&&p[0]!=null?p[0]+"-"+p[1]:"—"}\n`; }
+    t+="\n";
+  }
+  return t.trim();
+}
+
+document.getElementById("sendBtn").addEventListener("click",()=>{
+  if(!data.name.trim()){ alert("Vul eerst je naam in."); nameInp.focus(); return; }
+  const code=buildCode();
+  document.getElementById("resultCode").value=code;
+  document.getElementById("resultBox").classList.add("show");
+  document.getElementById("resultBox").scrollIntoView({behavior:"smooth"});
+});
+document.getElementById("copyCode").addEventListener("click",()=>{
+  const ta=document.getElementById("resultCode"); ta.select();
+  if(navigator.clipboard) navigator.clipboard.writeText(ta.value).catch(()=>{});
+  document.getElementById("copyCode").textContent="✓ Gekopieerd";
+  setTimeout(()=>document.getElementById("copyCode").textContent="📋 Kopieer code",2500);
+});
+document.getElementById("copyText").addEventListener("click",()=>{
+  const txt=buildText();
+  if(navigator.clipboard) navigator.clipboard.writeText(txt).catch(()=>{});
+  document.getElementById("copyText").textContent="✓ Gekopieerd";
+  setTimeout(()=>document.getElementById("copyText").textContent="📝 Kopieer leesbaar overzicht",2500);
+});
+
+renderGroups();
+updateProgress();
+updateBar();
+</script>
+</body>
+</html>
