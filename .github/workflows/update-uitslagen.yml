@@ -24,14 +24,14 @@ jobs:
 
       - name: Claude werkt results.js bij
         uses: anthropics/claude-code-base-action@beta
-        with:
+       with:
           prompt_file: OPDRACHT.md
           allowed_tools: "WebSearch,WebFetch,Read,Edit,Write"
           model: "claude-sonnet-4-6"
+          max_turns: "40"
+          claude_env: |
+            ANTHROPIC_SMALL_FAST_MODEL: claude-haiku-4-5-20251001
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
-          # Gebruik je liever je Claude-abonnement i.p.v. API-tegoed? Vervang de regel
-          # hierboven door:  claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-
       - name: Commit & push als er iets is veranderd
         run: |
           if [ -n "$(git status --porcelain results.js)" ]; then
