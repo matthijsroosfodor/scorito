@@ -1,0 +1,44 @@
+name: Update WK-uitslagen
+
+on:
+  schedule:
+    # GitHub-cron staat in UTC. In juni is NL = UTC+2 (zomertijd).
+    # Elk half uur tussen 15:00–06:59 UTC = 17:00–08:59 NL-tijd (het WK-wedstrijdvenster).
+    - cron: "*/30 15-23,0-6 * * *"
+  workflow_dispatch:        # knop om 'm handmatig te starten via tabblad Actions
+
+permissions:
+  contents: write           # nodig om de bijgewerkte results.js terug te pushen
+
+# Voorkomt dat twee runs tegelijk pushen
+concurrency:
+  group: update-uitslagen
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Repo ophalen
+        uses: actions/checkout@v4
+
+      - name: Claude werkt results.js bij
+        uses: anthropics/claude-code-base-action@beta
+        with:
+          prompt_file: OPDRACHT.md
+          allowed_tools: "WebSearch,WebFetch,Read,Edit,Write"
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          # Gebruik je liever je Claude-abonnement i.p.v. API-tegoed? Vervang de regel
+          # hierboven door:  claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+
+      - name: Commit & push als er iets is veranderd
+        run: |
+          if [ -n "$(git status --porcelain results.js)" ]; then
+            git config user.name "scorito-bot"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add results.js
+            git commit -m "Uitslagen bijgewerkt ($(TZ=Europe/Amsterdam date '+%d-%m %H:%M'))"
+            git push
+          else
+            echo "Geen nieuwe uitslagen — niets te pushen."
+          fi
