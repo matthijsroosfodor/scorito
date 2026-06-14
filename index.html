@@ -156,12 +156,14 @@ const RR=[[0,1],[2,3],[0,2],[1,3],[0,3],[1,2]];
 const MATCHES=[];
 for(const g of Object.keys(GROUPS)) RR.forEach((p,i)=>MATCHES.push({id:g+"-"+i,group:g,home:GROUPS[g][p[0]],away:GROUPS[g][p[1]]}));
 const POINTS={exact:45,toto:30,champ:250};
+/* Wedstrijden die NIET meetellen (gespeeld voordat iedereen had ingevuld). Uitslag blijft zichtbaar, 0 punten voor iedereen. */
+const EXCLUDED=new Set(["A-0","A-1","B-0","B-1","D-0"]);
 
 const PRED_WT={"A-0":[[0,0],[0,0]],"A-1":[[0,0],[0,0]],"A-2":[[2,1],[0,1]],"A-3":[[1,0],[0,1]],"A-4":[[2,1],[1,0]],"A-5":[[0,1],[0,2]],"B-0":[[0,0],[0,0]],"B-1":[[0,2],[0,2]],"B-2":[[1,1],[2,0]],"B-3":[[1,2],[0,2]],"B-4":[[1,1],[0,1]],"B-5":[[2,1],[2,0]],"C-0":[[2,1],[1,0]],"C-1":[[0,1],[0,2]],"C-2":[[3,0],[3,0]],"C-3":[[2,1],[0,1]],"C-4":[[2,1],[2,0]],"C-5":[[1,0],[2,0]],"D-0":[[2,0],[1,0]],"D-1":[[1,2],[0,2]],"D-2":[[1,1],[1,0]],"D-3":[[0,2],[0,2]],"D-4":[[1,2],[0,1]],"D-5":[[0,1],[0,0]],"E-0":[[3,0],[2,0]],"E-1":[[0,2],[1,0]],"E-2":[[2,1],[2,0]],"E-3":[[1,2],[1,0]],"E-4":[[1,1],[1,0]],"E-5":[[2,0],[0,1]],"F-0":[[2,1],[2,1]],"F-1":[[1,1],[1,0]],"F-2":[[3,2],[2,0]],"F-3":[[2,0],[2,0]],"F-4":[[2,0],[3,0]],"F-5":[[2,1],[1,0]],"G-0":[[2,1],[1,0]],"G-1":[[1,1],[2,0]],"G-2":[[3,1],[2,0]],"G-3":[[1,1],[2,0]],"G-4":[[2,0],[3,1]],"G-5":[[1,1],[1,0]],"H-0":[[3,0],[2,0]],"H-1":[[1,2],[0,1]],"H-2":[[3,0],[2,0]],"H-3":[[0,2],[1,0]],"H-4":[[3,1],[1,0]],"H-5":[[2,1],[0,0]],"I-0":[[2,1],[2,0]],"I-1":[[0,2],[0,2]],"I-2":[[3,0],[2,0]],"I-3":[[2,2],[0,1]],"I-4":[[2,1],[2,1]],"I-5":[[2,1],[2,0]],"J-0":[[2,0],[1,0]],"J-1":[[1,1],[1,0]],"J-2":[[3,0],[1,0]],"J-3":[[1,1],[2,0]],"J-4":[[2,0],[4,0]],"J-5":[[2,0],[1,2]],"K-0":[[2,0],[1,0]],"K-1":[[0,1],[0,1]],"K-2":[[3,0],[2,0]],"K-3":[[2,2],[0,1]],"K-4":[[2,1],[1,0]],"K-5":[[2,0],[1,1]],"L-0":[[2,2],[1,0]],"L-1":[[2,0],[1,0]],"L-2":[[3,0],[2,0]],"L-3":[[2,0],[1,0]],"L-4":[[2,0],[4,0]],"L-5":[[2,1],[1,0]]};
 function splitWT(i){ const o={}; for(const k in PRED_WT) o[k]=PRED_WT[k][i]; return o; }
 
 /* Externe inzendingen: bestanden in de repo die de pagina zelf inleest. */
-const EXTERNAL_FILES = ["mariska", "diana"];
+const EXTERNAL_FILES = ["mariska", "diana", "mariska-a", "diana-a"];
 
 const R = (window.RESULTS||{matches:{},champion:"",updated:""});
 const RES = R.matches||{};
@@ -192,7 +194,7 @@ function evalPred(pl,id){
   return {pts:0,kind:'miss'};
 }
 function champPts(pl){ return (CHAMP_ACTUAL && pl.champ===CHAMP_ACTUAL)?POINTS.champ:0; }
-function total(pl){ let t=0; for(const m of MATCHES) t+=evalPred(pl,m.id).pts; t+=champPts(pl); return t; }
+function total(pl){ let t=0; for(const m of MATCHES){ if(EXCLUDED.has(m.id)) continue; t+=evalPred(pl,m.id).pts; } t+=champPts(pl); return t; }
 function groupTable(g){
   const st={}; GROUPS[g].forEach(t=>st[t]={t,P:0,W:0,GF:0,GA:0,pts:0});
   RR.forEach((pr,i)=>{ const r=res(g+"-"+i); if(!r) return;
@@ -260,12 +262,18 @@ function renderGroups(){
 function matchHTML(g,i){
   const id=g+"-"+i, home=GROUPS[g][RR[i][0]], away=GROUPS[g][RR[i][1]];
   const r=res(id);
+  const excl=EXCLUDED.has(id);
   const resBox = r ? `<span class="res">${r[0]} - ${r[1]}</span>` : `<span class="res todo">– : –</span>`;
-  const cells=players.map(pl=>{ const e=evalPred(pl,id), p=pl.pred[id];
-    return `<div class="pred"><span class="who">${pl.name}</span><span class="rgt"><span class="val">${p?p[0]+'-'+p[1]:'—'}</span><span class="pt ${e.kind}">${ptLabel(e)}</span></span></div>`;
+  const cells=players.map(pl=>{ const p=pl.pred[id];
+    let pt;
+    if(excl){ pt=`<span class="pt none">–</span>`; }
+    else { const e=evalPred(pl,id); pt=`<span class="pt ${e.kind}">${ptLabel(e)}</span>`; }
+    return `<div class="pred"><span class="who">${pl.name}</span><span class="rgt"><span class="val">${p?p[0]+'-'+p[1]:'—'}</span>${pt}</span></div>`;
   }).join("");
+  const tag = excl ? `<div style="text-align:center;margin-top:6px"><span style="font-size:11px;font-weight:700;color:#9aa3b2;background:#eef2f7;border-radius:6px;padding:2px 8px">telt niet mee</span></div>` : "";
   return `<div class="match">
     <div class="mline"><span class="t h">${home} <span class="flag">${FLAG[home]}</span></span>${resBox}<span class="t a"><span class="flag">${FLAG[away]}</span> ${away}</span></div>
+    ${tag}
     <div class="preds">${cells}</div>
   </div>`;
 }
@@ -282,8 +290,11 @@ renderAll();
 (async function(){
   for(const f of EXTERNAL_FILES){
     try{ const resp=await fetch(f+"?v="+Date.now()); if(!resp.ok) continue;
-      players.push(decodeEntry(await resp.text())); }
-    catch(e){ console.warn("Kon inzending niet laden:",f,e); }
+      const e=decodeEntry(await resp.text());
+      const ex=players.find(p=>p.name.toLowerCase()===e.name.toLowerCase());
+      if(ex){ Object.assign(ex.pred, e.pred); if(!ex.champ && e.champ) ex.champ=e.champ; }
+      else players.push(e);
+    }catch(err){ console.warn("Kon inzending niet laden:",f,err); }
   }
   renderAll();
 })();
