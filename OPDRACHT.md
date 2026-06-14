@@ -3,9 +3,12 @@
 Je houdt het scorito-klassement actueel. Werk het bestand `results.js` in deze map bij met
 de **definitieve** uitslagen van afgelopen WK 2026-wedstrijden, en push de wijziging naar GitHub.
 
-**Werk efficiënt en snel.** Doe maximaal 1 à 2 gerichte zoekopdrachten naar de uitslagen van de
-afgelopen ~2 dagen. Zodra je de afgelopen wedstrijden hebt: werk `results.js` bij en stop direct.
-Geen eindeloze zoektochten. Zijn er geen nieuwe afgelopen wedstrijden? Dan niets wijzigen en klaar.
+**Werk snel — je hebt beperkte tijd (ruim onder 9 minuten blijven).**
+- Gebruik **alleen WebSearch** (korte zoekresultaten). Haal GEEN volledige webpagina's op.
+- Doe maximaal 2–3 gerichte zoekopdrachten, bv. "WK 2026 uitslagen <gisteren/vandaag>".
+- De scores staan meestal al in de zoekresultaten zelf; daar haal je ze uit.
+- Zodra je de afgelopen wedstrijden hebt: werk `results.js` bij en stop direct.
+- Geen nieuwe afgelopen wedstrijden? Dan niets wijzigen en klaar.
 
 ## Stappen
 
