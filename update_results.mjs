@@ -1,7 +1,8 @@
 // Haalt WK 2026-uitslagen op via football-data.org en schrijft results.js.
 // Geen LLM, deterministisch. Vereist secret FOOTBALL_DATA_TOKEN.
 import { writeFileSync, readFileSync } from "node:fs";
-
+import { fileURLToPath } from "node:url";
+ 
 const GROUPS = {
   A:["Mexico","Zuid-Afrika","Zuid-Korea","Tsjechië"],
   B:["Canada","Bosnië-Herz.","Qatar","Zwitserland"],
@@ -17,7 +18,7 @@ const GROUPS = {
   L:["Engeland","Kroatië","Ghana","Panama"]
 };
 const RR=[[0,1],[2,3],[0,2],[1,3],[0,3],[1,2]];
-
+ 
 // Engelse/alternatieve namen -> Nederlandse naam
 const ALIASES = {
   "Mexico":["mexico"],"Zuid-Afrika":["southafrica"],"Zuid-Korea":["southkorea","korearepublic","republicofkorea","korea"],
@@ -27,15 +28,15 @@ const ALIASES = {
   "Australië":["australia"],"Turkije":["turkiye","turkey"],"Duitsland":["germany"],"Curaçao":["curacao"],
   "Ivoorkust":["ivorycoast","cotedivoire"],"Ecuador":["ecuador"],"Nederland":["netherlands","holland"],"Japan":["japan"],
   "Zweden":["sweden"],"Tunesië":["tunisia"],"België":["belgium"],"Egypte":["egypt"],"Iran":["iran","iriran"],
-  "Nieuw-Zeeland":["newzealand"],"Spanje":["spain"],"Kaapverdië":["capeverde","caboverde"],"Saoedi-Arabië":["saudiarabia"],
+  "Nieuw-Zeeland":["newzealand"],"Spanje":["spain"],"Kaapverdië":["capeverde","caboverde","capeverdeislands"],"Saoedi-Arabië":["saudiarabia"],
   "Uruguay":["uruguay"],"Frankrijk":["france"],"Senegal":["senegal"],"Irak":["iraq"],"Noorwegen":["norway"],
   "Argentinië":["argentina"],"Algerije":["algeria"],"Oostenrijk":["austria"],"Jordanië":["jordan"],"Portugal":["portugal"],
   "Congo":["drcongo","congodr","democraticrepublicofthecongo","congo"],"Oezbekistan":["uzbekistan"],"Colombia":["colombia"],
   "Engeland":["england"],"Kroatië":["croatia"],"Ghana":["ghana"],"Panama":["panama"]
 };
-
+ 
 const norm = s => (s||"").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z0-9]/g,"");
-
+ 
 // normalized -> NL naam (inclusief de NL-naam zelf)
 const NAME2NL = {};
 for (const [nl, arr] of Object.entries(ALIASES)) {
@@ -43,7 +44,7 @@ for (const [nl, arr] of Object.entries(ALIASES)) {
   for (const a of arr) NAME2NL[norm(a)] = nl;
 }
 const resolve = name => NAME2NL[norm(name)] || null;
-
+ 
 // wedstrijd-lookup op ongeordend teampaar -> { id, home, away }
 const LOOKUP = {};
 for (const g of Object.keys(GROUPS)) {
@@ -53,7 +54,7 @@ for (const g of Object.keys(GROUPS)) {
     LOOKUP[key]={ id:g+"-"+i, home, away };
   });
 }
-
+ 
 export function buildResults(apiMatches){
   const matches={}; let champion=""; const warnings=[];
   for (const m of apiMatches){
@@ -73,7 +74,7 @@ export function buildResults(apiMatches){
   }
   return { matches, champion, warnings };
 }
-
+ 
 export function renderFile({matches, champion}){
   const order = Object.keys(matches).sort((a,b)=>{
     const [ga,ia]=a.split("-"), [gb,ib]=b.split("-");
@@ -87,7 +88,7 @@ export function renderFile({matches, champion}){
   out += `\n  }\n};\n`;
   return out;
 }
-
+ 
 async function main(){
   const token = process.env.FOOTBALL_DATA_TOKEN;
   if(!token){ console.error("FOUT: secret FOOTBALL_DATA_TOKEN ontbreekt."); process.exit(1); }
@@ -100,5 +101,5 @@ async function main(){
   writeFileSync("results.js", renderFile({matches, champion}));
   console.log("results.js bijgewerkt.");
 }
-
-if (import.meta.url === `file://${process.argv[1]}`) main();
+ 
+if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) main();
