@@ -2,9 +2,10 @@ name: Update WK-uitslagen
  
 on:
   schedule:
-    # GitHub-cron staat in UTC. In juni is NL = UTC+2 (zomertijd).
-    # Elk half uur tussen 15:00–06:59 UTC = 17:00–08:59 NL-tijd (het WK-wedstrijdvenster).
-    - cron: "*/30 15-23,0-6 * * *"
+    # Elk half uur, de hele dag door. Zo wordt elke wedstrijd binnen ~30 min opgepakt,
+    # ongeacht het tijdstip. Runs zonder nieuwe uitslag doen niets en zijn dus goedkoop.
+    # (GitHub-cron staat in UTC; bij dit 24-uurs schema maakt de tijdzone niet uit.)
+    - cron: "*/30 * * * *"
   workflow_dispatch:        # knop om 'm handmatig te starten via tabblad Actions
  
 permissions:
