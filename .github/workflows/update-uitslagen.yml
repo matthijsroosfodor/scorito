@@ -1,5 +1,5 @@
 name: Update WK-uitslagen
- 
+
 on:
   schedule:
     # Elk half uur, de hele dag door. Zo wordt elke wedstrijd binnen ~30 min opgepakt,
@@ -7,35 +7,35 @@ on:
     # (GitHub-cron staat in UTC; bij dit 24-uurs schema maakt de tijdzone niet uit.)
     - cron: "*/30 * * * *"
   workflow_dispatch:        # knop om 'm handmatig te starten via tabblad Actions
- 
+
 permissions:
   contents: write           # nodig om de bijgewerkte results.js terug te pushen
- 
+
 # Voorkomt dat twee runs tegelijk pushen
 concurrency:
   group: update-uitslagen
   cancel-in-progress: false
- 
+
 jobs:
   update:
     runs-on: ubuntu-latest
     steps:
       - name: Repo ophalen
         uses: actions/checkout@v4
- 
+
       - name: Claude werkt results.js bij
         uses: anthropics/claude-code-base-action@beta
         with:
           prompt_file: OPDRACHT.md
-          allowed_tools: "WebSearch,Read,Edit,Write"
+          allowed_tools: "WebSearch,WebFetch,Read,Edit,Write"
           model: "claude-sonnet-4-6"
-          max_turns: "15"
+          max_turns: "20"
           claude_env: |
             ANTHROPIC_SMALL_FAST_MODEL: claude-haiku-4-5-20251001
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           # Gebruik je liever je Claude-abonnement i.p.v. API-tegoed? Vervang de regel
           # hierboven door:  claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
- 
+
       - name: Commit & push als er iets is veranderd
         run: |
           if [ -n "$(git status --porcelain results.js)" ]; then
