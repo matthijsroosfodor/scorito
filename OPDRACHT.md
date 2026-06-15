@@ -3,12 +3,15 @@
 Je houdt het scorito-klassement actueel. Werk het bestand `results.js` in deze map bij met
 de **definitieve** uitslagen van afgelopen WK 2026-wedstrijden, en push de wijziging naar GitHub.
 
-**Werk snel — je hebt beperkte tijd (ruim onder 9 minuten blijven).**
-- Gebruik **alleen WebSearch** (korte zoekresultaten). Haal GEEN volledige webpagina's op.
-- Doe maximaal 2–3 gerichte zoekopdrachten, bv. "WK 2026 uitslagen <gisteren/vandaag>".
-- De scores staan meestal al in de zoekresultaten zelf; daar haal je ze uit.
-- Zodra je de afgelopen wedstrijden hebt: werk `results.js` bij en stop direct.
-- Geen nieuwe afgelopen wedstrijden? Dan niets wijzigen en klaar.
+**Aanpak (werk snel, blijf ruim onder 9 minuten):**
+1. Lees eerst `results.js`: noteer welke wedstrijd-ID's al een uitslag hebben.
+2. Zoek een **compleet, actueel overzicht** van alle tot nu toe gespeelde WK 2026-wedstrijden
+   met eindstanden. Gebruik WebSearch om een betrouwbare overzichtspagina te vinden
+   (bijv. Wikipedia "2026 FIFA World Cup", of een uitslagensite). Je mag WebFetch gebruiken,
+   maar haal **hooguit 1–2 pagina's** op zodat je snel blijft.
+3. Voeg **élke inmiddels gespeelde wedstrijd** toe die nog niet in `results.js` staat —
+   dus niet alleen de allernieuwste. Loop alle poules A t/m L na.
+4. Werk `results.js` bij en stop. Zijn er geen nieuwe gespeelde wedstrijden? Niets wijzigen, klaar.
 
 ## Stappen
 
