@@ -128,7 +128,6 @@ body{ margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,H
   </div>
 </div>
 
-<script src="results.js"></script>
 <script>
 const GROUPS = {
   A:["Mexico","Zuid-Afrika","Zuid-Korea","Tsjechië"],
@@ -165,9 +164,9 @@ function splitWT(i){ const o={}; for(const k in PRED_WT) o[k]=PRED_WT[k][i]; ret
 /* Externe inzendingen: bestanden in de repo die de pagina zelf inleest. */
 const EXTERNAL_FILES = ["mariska", "diana", "mariska-a", "diana-a"];
 
-const R = (window.RESULTS||{matches:{},champion:"",updated:""});
-const RES = R.matches||{};
-const CHAMP_ACTUAL = R.champion||"";
+let R = {matches:{},champion:"",updated:""};
+let RES = {};
+let CHAMP_ACTUAL = "";
 
 let players = [
   { name:"Wil",   champ:"Nederland", pred: splitWT(0) },
@@ -284,10 +283,12 @@ function renderProgress(){
 }
 function renderAll(){ renderBoard(); renderChamp(); renderProgress(); renderGroups(); }
 
-document.getElementById("updated").textContent = R.updated ? ("Laatst bijgewerkt: "+R.updated) : "Nog geen uitslagen";
-renderAll();
-
-(async function(){
+async function init(){
+  R = window.RESULTS || {matches:{},champion:"",updated:""};
+  RES = R.matches||{};
+  CHAMP_ACTUAL = R.champion||"";
+  document.getElementById("updated").textContent = R.updated ? ("Laatst bijgewerkt: "+R.updated) : "Nog geen uitslagen";
+  renderAll();
   for(const f of EXTERNAL_FILES){
     try{ const resp=await fetch(f+"?v="+Date.now()); if(!resp.ok) continue;
       const e=decodeEntry(await resp.text());
@@ -297,7 +298,12 @@ renderAll();
     }catch(err){ console.warn("Kon inzending niet laden:",f,err); }
   }
   renderAll();
-})();
+}
+// results.js met cache-buster laden, zodat je altijd de nieuwste stand ziet
+const _rs=document.createElement("script");
+_rs.src="results.js?v="+Date.now();
+_rs.onload=init; _rs.onerror=init;
+document.head.appendChild(_rs);
 </script>
 </body>
 </html>
