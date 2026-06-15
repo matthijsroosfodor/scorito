@@ -1,7 +1,7 @@
 // Uitslagen WK 2026 — wordt automatisch bijgewerkt door Claude Code.
 // Formaat: matches["<poule>-<index>"] = [thuis, uit].  champion = landnaam zodra bekend.
 window.RESULTS = {
-  updated: "14 jun 2026, 23:45",
+  updated: "15 jun 2026, 18:30",
   champion: "",
   matches: {
     "A-0": [2, 0],
@@ -12,5 +12,9 @@ window.RESULTS = {
     "C-1": [0, 1],
     "D-0": [4, 1],
     "D-1": [2, 0],
+    "E-0": [7, 1],
+    "E-1": [1, 0],
+    "F-0": [2, 2],
+    "F-1": [5, 1],
   }
 };
