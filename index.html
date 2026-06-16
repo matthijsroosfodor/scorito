@@ -304,23 +304,34 @@ const resolveTeam=n=>NAME2NL[nrm(n)]||null;
 const LOOKUP={};
 for(const g of Object.keys(GROUPS)) RR.forEach((p,i)=>{ const h=GROUPS[g][p[0]],a=GROUPS[g][p[1]]; LOOKUP[[h,a].sort().join("|")]={id:g+"-"+i,home:h,away:a}; });
 
-/* ---- Live uitslagen van TheSportsDB (gratis, rechtstreeks in de browser) ---- */
-const TSDB="https://www.thesportsdb.com/api/v1/json/3/eventsseason.php?id=4429&s=2026";
-const FINISHED=new Set(["FT","AET","PEN","Match Finished","Finished"]);
+/* ---- Live uitslagen van ESPN (gratis, geen sleutel, rechtstreeks in de browser) ---- */
+const ESPN="https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard?dates=";
+function tournamentDates(){
+  const out=[]; const d=new Date("2026-06-11T12:00:00"); const end=new Date();
+  end.setHours(23,59,59,999);
+  while(d<=end){ out.push(`${d.getFullYear()}${String(d.getMonth()+1).padStart(2,"0")}${String(d.getDate()).padStart(2,"0")}`); d.setDate(d.getDate()+1); }
+  return out;
+}
 async function fetchLive(){
-  const r=await fetch(TSDB+"&_="+Date.now());
-  if(!r.ok) throw new Error("HTTP "+r.status);
-  const ev=(await r.json()).events||[];
-  const matches={};
-  for(const e of ev){
-    if(!FINISHED.has((e.strStatus||"").trim())) continue;
-    const hs=e.intHomeScore, as=e.intAwayScore;
-    if(hs==null||hs===""||as==null||as==="") continue;
-    const hNL=resolveTeam(e.strHomeTeam), aNL=resolveTeam(e.strAwayTeam);
-    if(!hNL||!aNL){ console.warn("Onbekend team:",e.strHomeTeam,"/",e.strAwayTeam); continue; }
-    const f=LOOKUP[[hNL,aNL].sort().join("|")]; if(!f) continue;  // knock-out wordt overgeslagen
-    matches[f.id]=(hNL===f.home)?[+hs,+as]:[+as,+hs];
+  const days=tournamentDates();
+  const res=await Promise.allSettled(days.map(dt=>fetch(ESPN+dt).then(r=>r.ok?r.json():null)));
+  const matches={}; let any=false;
+  for(const r of res){
+    if(r.status!=="fulfilled"||!r.value) continue;
+    for(const e of (r.value.events||[])){
+      const t=e.status&&e.status.type; if(!t||!t.completed) continue;       // alleen afgelopen wedstrijden
+      const comp=e.competitions&&e.competitions[0]; if(!comp) continue;
+      const cs=comp.competitors||[];
+      const H=cs.find(c=>c.homeAway==="home"), A=cs.find(c=>c.homeAway==="away"); if(!H||!A) continue;
+      const hNL=resolveTeam(H.team&&(H.team.displayName||H.team.name)), aNL=resolveTeam(A.team&&(A.team.displayName||A.team.name));
+      if(!hNL||!aNL){ console.warn("Onbekend team:",H.team&&H.team.displayName,"/",A.team&&A.team.displayName); continue; }
+      const f=LOOKUP[[hNL,aNL].sort().join("|")]; if(!f) continue;           // knock-out wordt (nog) overgeslagen
+      const hs=parseInt(H.score,10), as=parseInt(A.score,10); if(isNaN(hs)||isNaN(as)) continue;
+      matches[f.id]=(hNL===f.home)?[hs,as]:[as,hs];
+      any=true;
+    }
   }
+  if(!any) throw new Error("geen ESPN-data");
   return matches;
 }
 
