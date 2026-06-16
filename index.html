@@ -283,11 +283,59 @@ function renderProgress(){
 }
 function renderAll(){ renderBoard(); renderChamp(); renderProgress(); renderGroups(); }
 
+/* ---- Teamnaam-herkenning + wedstrijd-lookup (voor live uitslagen) ---- */
+const ALIASES={
+"Mexico":["mexico"],"Zuid-Afrika":["southafrica"],"Zuid-Korea":["southkorea","korearepublic","republicofkorea","korea"],
+"Tsjechië":["czechia","czechrepublic"],"Canada":["canada"],"Bosnië-Herz.":["bosniaandherzegovina","bosniaherzegovina","bosnia"],
+"Qatar":["qatar"],"Zwitserland":["switzerland"],"Brazilië":["brazil"],"Marokko":["morocco"],"Haïti":["haiti"],
+"Schotland":["scotland"],"Verenigde Staten":["unitedstates","usa","unitedstatesofamerica"],"Paraguay":["paraguay"],
+"Australië":["australia"],"Turkije":["turkiye","turkey"],"Duitsland":["germany"],"Curaçao":["curacao"],
+"Ivoorkust":["ivorycoast","cotedivoire"],"Ecuador":["ecuador"],"Nederland":["netherlands","holland"],"Japan":["japan"],
+"Zweden":["sweden"],"Tunesië":["tunisia"],"België":["belgium"],"Egypte":["egypt"],"Iran":["iran","iriran"],
+"Nieuw-Zeeland":["newzealand"],"Spanje":["spain"],"Kaapverdië":["capeverde","caboverde","capeverdeislands"],"Saoedi-Arabië":["saudiarabia"],
+"Uruguay":["uruguay"],"Frankrijk":["france"],"Senegal":["senegal"],"Irak":["iraq"],"Noorwegen":["norway"],
+"Argentinië":["argentina"],"Algerije":["algeria"],"Oostenrijk":["austria"],"Jordanië":["jordan"],"Portugal":["portugal"],
+"Congo":["drcongo","congodr","democraticrepublicofthecongo","congo"],"Oezbekistan":["uzbekistan"],"Colombia":["colombia"],
+"Engeland":["england"],"Kroatië":["croatia"],"Ghana":["ghana"],"Panama":["panama"]
+};
+const nrm=s=>(s||"").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z0-9]/g,"");
+const NAME2NL={}; for(const [nl,arr] of Object.entries(ALIASES)){ NAME2NL[nrm(nl)]=nl; for(const a of arr) NAME2NL[nrm(a)]=nl; }
+const resolveTeam=n=>NAME2NL[nrm(n)]||null;
+const LOOKUP={};
+for(const g of Object.keys(GROUPS)) RR.forEach((p,i)=>{ const h=GROUPS[g][p[0]],a=GROUPS[g][p[1]]; LOOKUP[[h,a].sort().join("|")]={id:g+"-"+i,home:h,away:a}; });
+
+/* ---- Live uitslagen van TheSportsDB (gratis, rechtstreeks in de browser) ---- */
+const TSDB="https://www.thesportsdb.com/api/v1/json/3/eventsseason.php?id=4429&s=2026";
+const FINISHED=new Set(["FT","AET","PEN","Match Finished","Finished"]);
+async function fetchLive(){
+  const r=await fetch(TSDB+"&_="+Date.now());
+  if(!r.ok) throw new Error("HTTP "+r.status);
+  const ev=(await r.json()).events||[];
+  const matches={};
+  for(const e of ev){
+    if(!FINISHED.has((e.strStatus||"").trim())) continue;
+    const hs=e.intHomeScore, as=e.intAwayScore;
+    if(hs==null||hs===""||as==null||as==="") continue;
+    const hNL=resolveTeam(e.strHomeTeam), aNL=resolveTeam(e.strAwayTeam);
+    if(!hNL||!aNL){ console.warn("Onbekend team:",e.strHomeTeam,"/",e.strAwayTeam); continue; }
+    const f=LOOKUP[[hNL,aNL].sort().join("|")]; if(!f) continue;  // knock-out wordt overgeslagen
+    matches[f.id]=(hNL===f.home)?[+hs,+as]:[+as,+hs];
+  }
+  return matches;
+}
+
 async function init(){
-  R = window.RESULTS || {matches:{},champion:"",updated:""};
-  RES = R.matches||{};
-  CHAMP_ACTUAL = R.champion||"";
-  document.getElementById("updated").textContent = R.updated ? ("Laatst bijgewerkt: "+R.updated) : "Nog geen uitslagen";
+  let live=null;
+  try{ live=await fetchLive(); }catch(err){ console.warn("Live ophalen mislukt:",err); }
+  if(live && Object.keys(live).length){
+    RES=live; CHAMP_ACTUAL="";
+    const now=new Intl.DateTimeFormat("nl-NL",{hour:"2-digit",minute:"2-digit"}).format(new Date());
+    document.getElementById("updated").textContent="Live · bijgewerkt om "+now;
+  } else {
+    R = window.RESULTS || {matches:{},champion:"",updated:""};
+    RES = R.matches||{}; CHAMP_ACTUAL = R.champion||"";
+    document.getElementById("updated").textContent = R.updated ? ("Laatst bijgewerkt: "+R.updated) : "Nog geen uitslagen";
+  }
   renderAll();
   for(const f of EXTERNAL_FILES){
     try{ const resp=await fetch(f+"?v="+Date.now()); if(!resp.ok) continue;
@@ -299,7 +347,7 @@ async function init(){
   }
   renderAll();
 }
-// results.js met cache-buster laden, zodat je altijd de nieuwste stand ziet
+// reserve results.js laden (voor als live faalt), daarna live ophalen
 const _rs=document.createElement("script");
 _rs.src="results.js?v="+Date.now();
 _rs.onload=init; _rs.onerror=init;
