@@ -308,7 +308,7 @@ for(const g of Object.keys(GROUPS)) RR.forEach((p,i)=>{ const h=GROUPS[g][p[0]],
 const ESPN="https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard?dates=";
 function tournamentDates(){
   const out=[]; const d=new Date("2026-06-11T12:00:00"); const end=new Date();
-  end.setHours(23,59,59,999);
+  end.setDate(end.getDate()+1); end.setHours(23,59,59,999);   // t/m morgen, voor tijdzone-randgevallen
   while(d<=end){ out.push(`${d.getFullYear()}${String(d.getMonth()+1).padStart(2,"0")}${String(d.getDate()).padStart(2,"0")}`); d.setDate(d.getDate()+1); }
   return out;
 }
