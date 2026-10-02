@@ -1,7 +1,7 @@
 // Uitslagen WK 2026 — automatisch bijgewerkt via football-data.org.
 // Niet handmatig bewerken; dit bestand wordt overschreven door de workflow.
 window.RESULTS = {
-  updated: "2 okt 2026, 03:51",
+  updated: "2 okt 2026, 04:15",
   champion: "Spanje",
   matches: {
     "A-0": [2, 0],
